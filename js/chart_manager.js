@@ -118,7 +118,24 @@ var Chart = {
             }
         });
         ChartEditor.deleteSelectedBlocks();
-    }
+    },
+
+    displayPopup: (name, catalog, description, prereqs, units, type) => {
+       $('.popup-disabled').show();
+       $('body').append(
+           Popup.courseInfo(name, catalog, description, prereqs, units, type)
+       );
+    },
+
+    closePopup: () => {
+        $(".popup-disabled").fadeOut("fast");
+        $(".popup-window").animate({
+            opacity: 0,
+            top: "-=150",
+        }, 100, function() {
+            $(this).remove();
+        });
+    },
 }
 
 var User = {

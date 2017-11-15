@@ -146,11 +146,15 @@ function newBlockComponent(block_metadata, course_data, course_type = null, id =
     if (!course_type) {
         course_type = block_metadata ? block_metadata.course_type.toLowerCase().split(' ').join("-") : "major";
     }
+    var name = course_data.title;
+    var catalog = `${course_data.dept} ${course_data.course_number}`;
+    var desc = course_data.description;
+    var prereqs = course_data.prereqs;
+    var units = course_data.units;
     return `
         <div class="block-outline show-block"
-         onmouseup="ChartEditor.determineBlockAction(this, '${course_data.title}',
-          '${course_data.description}', '${course_data.prereqs}', '${course_data.dept}',
-          '${course_data.course_number}')">
+         onmouseup="Chart.displayPopup('${name}', '${catalog}', '${desc}',
+                                       '${prereqs}', '${units}', '${course_type}')">
             <div class="edit-block-button">
                 <i class="material-icons">check</i>
             </div>
@@ -413,6 +417,44 @@ function newAboutView() {
         ${Button.menuOption('', "openUrlInNewTab('http://devjimheald.com')", 'Jim Heald (Backend)', 'open_in_new')}
         ${Button.menuOption('', "openUrlInNewTab('http://tannerv.com')", 'Tanner Villarete (Frontend)', 'open_in_new')}
     `
+}
+
+var Popup = {
+    courseInfo: (name, catalog, description, prereqs, units, type) => {
+        prereqs = prereqs == 'null' ? 'None' : prereqs;
+        var dept = catalog.split(' ')[0];
+        var num = catalog.split(' ')[1];
+        return `
+        <div class="popup-window">
+            <div class="popup-header ${type}">
+                <div class="popup-title-container">
+                    <h3><b>${catalog}</b></h3>
+                    <h3>${name}</h3>
+                </div>
+                <div class="close-popup-container">
+                    <h3 id="close-popup-button"
+                     onclick="Chart.closePopup()">&times;</h3>
+                    <h3 id="popup-unit-count">${units} units</h3>
+                </div>
+            </div>
+            <div class="popup-section prereq-container">
+                <div class="popup-section-title">Prereqs</div>
+                <div class="popup-section-body">${prereqs}</div>
+            </div>
+            <div class="popup-section description-container">
+                <div class="popup-section-title">Description</div>
+                <div class="popup-section-body">${description}</div>
+            </div>
+            <div class="popup-section button-container">
+                <div class="popup-button"
+                 onclick="window.open('http://polyratings.com/search.php?type=Class&terms=${dept}+${num}&format=long&sort=rating')">
+                    Check PolyRatings
+                 </div>
+            </div>
+        </div>
+
+        `;
+    }
 }
 
 var MenuView = {

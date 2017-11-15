@@ -17,12 +17,11 @@ var ChartEditor = {
         }, 400);
     },
 
-    determineBlockAction: (block, title, desc, prereqs, dept, course_number) => {
+    determineBlockAction: (block, name, desc, prereqs, dept, course_number) => {
         clearTimeout(timeoutId);
         if (!isLongPress && $('.base').hasClass('base-editing')) {
             ChartEditor.select(block);
         } else if (!$(block).hasClass('multi-block') && !$(block).hasClass('elective-block')) {
-            popupCourseInfo(title, desc, prereqs, dept, course_number);
         }
         isLongPress = false;
     },

@@ -261,7 +261,7 @@
     cursor: pointer;
     animation: fadein .15s;
 }
-
+/*
 .popup-message {
     z-index: 31;
     position: fixed;
@@ -358,3 +358,4 @@
     background: black;
     margin: 0;
 }
+*/

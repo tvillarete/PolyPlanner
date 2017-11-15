@@ -157,7 +157,8 @@ function popupMessage(title, message, dismiss=false, postNote=false) {
             <h2 class="popup-title">${title}</h2>
             <h3 class="popup-body">`+message+`</h3>
             <h4 class="popup-ps">${postNote ? postNote : ""}</h4>
-            <h4 class="close-popup-message ${dismiss ? "" : "hidden"}" onclick="closePopupMessage()">Okay</h4>
+            <h4 class="close-popup-message ${dismiss ? "" : "hidden"}"
+             onclick="closePopupMessage()">Okay</h4>
          </div>`;
     $(".popup-disabled").show();
     $("body").append(element);

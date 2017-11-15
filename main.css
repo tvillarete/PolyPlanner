@@ -103,7 +103,7 @@
     transform: translateY(50%); } }
 @keyframes movingUp {
   0% {
-    transform: translateY(100px) rotate(-2deg); } }
+    transform: translateY(100px); } }
 @keyframes movingDown {
   0% {
     transform: translateY(-50px) rotate(2deg); } }
@@ -738,6 +738,71 @@ input:checked + .toggle:before {
     margin: 0.4em; }
   .color-choice:active {
     filter: brightness(75%); }
+
+.popup-window {
+  z-index: 30;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-width: 34em;
+  max-height: 32em;
+  background: white;
+  box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
+  animation: movingUp 0.15s; }
+  .popup-window .popup-header {
+    display: flex;
+    justify-content: space-between;
+    height: 6em;
+    padding: 1em 1em 1em 2em; }
+    .popup-window .popup-header h3 {
+      margin: 0.5em 0;
+      font-size: 1.6em;
+      color: rgba(0, 0, 0, 0.65); }
+  .popup-window .close-popup-container {
+    display: flex;
+    flex-direction: column;
+    text-align: right; }
+    .popup-window .close-popup-container #close-popup-button {
+      font-size: 2.5em;
+      margin: 0;
+      line-height: 0;
+      cursor: pointer; }
+    .popup-window .close-popup-container #popup-unit-count {
+      margin-top: 4em;
+      font-size: 1em;
+      font-weight: bold; }
+  .popup-window .popup-section {
+    display: flex;
+    padding: 1em 2em; }
+    .popup-window .popup-section .popup-section-title {
+      width: 10em;
+      font-weight: bold; }
+    .popup-window .popup-section .popup-section-body {
+      width: 100%;
+      overflow: auto; }
+  .popup-window .prereq-container {
+    height: 15%;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
+    .popup-window .prereq-container .popup-section-title {
+      color: #ad2929; }
+  .popup-window .description-container {
+    height: 10em; }
+  .popup-window .button-container {
+    display: flex;
+    justify-content: center; }
+  .popup-window .popup-button {
+    height: 0.5em;
+    line-height: 0.5em;
+    padding: 1em;
+    color: white;
+    border-radius: 4px;
+    background: dodgerblue;
+    cursor: pointer; }
 
 /* Layout */
 .header {
