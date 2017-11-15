@@ -1,0 +1,45 @@
+.external-site-modal {
+    display: none;
+    position: fixed;
+    top: 6em;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    animation: slide-up .35s;
+
+    .external-site-nav {
+        display: flex;
+        height: 1em;
+        width: 100%;
+        justify-content: flex-end;
+        font-size: 3em;
+        color: rgb(100,100,100);
+
+        p {
+            margin: 0.4em;
+            line-height: 0;
+            cursor: pointer;
+        }
+    }
+
+    .site-container {
+        position: fixed;
+        top: 9em;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        overflow: auto;
+
+        embed {
+            height: 100%;
+            width: 100%;
+        }
+    }
+}
+
+.desktop {
+    .site-container {
+        top: 7em;
+    }
+}

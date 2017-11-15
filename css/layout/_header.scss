@@ -1,0 +1,196 @@
+.header {
+    z-index: 21;
+    position: fixed;
+    height: 6em;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: $header-color;
+    box-shadow: $bottom-box-shadow;
+
+    .header-button {
+        text-align: center;
+        font-size: 3em;
+        height: 100%;
+        width: 1.5em;
+        line-height: 1em;
+        cursor: pointer;
+        color: white;
+
+        &.edit-action-button {
+            filter: opacity(10%);
+        }
+
+        &.clickable {
+            filter: opacity(100%);
+        }
+    }
+
+    .header-contents {
+        display: flex;
+        justify-content: flex-end;
+        height: 3em;
+
+        .chart-menu-open-button {
+            z-index: 2;
+            position: absolute;
+            right: 0;
+            color: white;
+        }
+
+        .chart-menu {
+            z-index: 1;
+            position: absolute;
+            top: 0.2em;
+            right: 0.2em;
+            width: 100%;
+            max-width: 15em;
+            padding-top: 3em;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            border-radius: 2px;
+            box-shadow: $bottom-box-shadow;
+            animation: chart-menu-open 0.15s;
+            transform-origin: top center;
+        }
+
+        .chart-menu-button {
+            font-size: 1.3em;
+            height: 2em;
+            line-height: 2em;
+            cursor: pointer;
+
+            &:hover {
+                background: rgba(0,0,0,0.07);
+            }
+        }
+
+        .active-button {
+            color: $header-color;
+        }
+    }
+
+    .edit-container {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: $header-color;
+        display: flex;
+        justify-content: space-between;
+        color: white;
+
+        .header-button {
+            text-align: center;
+            font-size: 3em;
+            height: 100%;
+            width: 1.5em;
+            line-height: 1em;
+            cursor: pointer;
+        }
+
+        .left-container {
+            display: flex;
+            flex-wrap: nowrap;
+
+            #selected-count-container {
+                font-size: 1.3em;
+                line-height: 2em;
+                height: 2em;
+                margin-top: 0.5em;
+                padding-left: 1em;
+                border-left: 1px solid rgba(100,100,100,0.6);
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+
+            #close-edit-container-button {
+                line-height: 1.2em;
+            }
+        }
+
+        .edit-action-container {
+            display: flex;
+        }
+    }
+
+    h3 {
+        position: absolute;
+        margin: auto;
+        top: 1em;
+        left: 0;
+        right: 0;
+        max-width: 5em;
+        color: white;
+    }
+
+    .header-title {
+        position: absolute;
+        margin: auto;
+        top: .6em;
+        left: 0;
+        right: 0;
+        max-width: 5em;
+        color: white;
+        min-width: 15em;
+        font-size: 25px;
+        text-align: center;
+    }
+
+    .nav-button {
+        padding-left: 2em;
+        padding-right: 2em;
+        height: 3em;
+        line-height: .6em;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all .15s ease-in-out;
+
+        h3:active {
+            color: darkgray;
+        }
+    }
+
+    #edit-flowchart {
+        position: fixed;
+        top: .6em;
+        height: 30px;
+        right: 1em;
+        padding: .5em;
+        padding-bottom: .2em;
+        transition: all .15s ease-in-out;
+        text-align: center;
+        touch-action: manipulation;
+    }
+
+    .unclickable, .unclickable h3 {
+        pointer-events: none;
+        color: $header-color;
+        transition: all .15s ease-in-out;
+    }
+
+    .disabled-button {
+        background: rgba(0,0,0,.12);
+        color: rgba(0,0,0,.2);
+        pointer-events: none;
+    }
+
+    .tabs {
+        z-index: 0;
+        overflow-x: auto;
+    }
+}
+
+.desktop {
+    .header {
+        height: 4em;
+    }
+
+    .tabs {
+        display: none;
+    }
+}

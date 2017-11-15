@@ -1,0 +1,128 @@
+@keyframes delayed-fade {
+    0% {
+        opacity: 0;
+    } 80% {
+        opacity: 0;
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(-90deg);
+        opacity: 0;
+    }
+}
+
+@keyframes show-block {
+    0% {
+        opacity: 0;
+        transform: translateY(25%);
+    }
+}
+
+@keyframes show-block-desktop {
+    0% {
+        opacity: 0;
+        transform: translateX(25%);
+    }
+}
+
+@keyframes fade-up {
+    0% {
+        transform: translateY(50%);
+    }
+}
+
+@keyframes movingUp {
+    0% {
+        transform: translateY(100px) rotate(-2deg);
+    }
+}
+
+@keyframes movingDown {
+    0% {
+        transform: translateY(-50px) rotate(2deg);
+    }
+}
+
+@keyframes movingLeft {
+    0% {
+        transform: translateX(50px);
+    }
+}
+
+@keyframes movingRight {
+    0% {
+        transform: translateX(-50px);
+    }
+}
+
+@keyframes slide-out-left {
+    100% {
+//        opacity: 0;
+        transform: translateX(-15%);
+    }
+}
+
+@keyframes slide-in-left {
+    0% {
+        opacity: 0;
+        transform: translateX(-15%);
+    }
+}
+
+@keyframes slide-out-right {
+    100% {
+        opacity: 0;
+        transform: translateX(-15%);
+    }
+}
+
+@keyframes slide-in-right {
+    0% {
+        opacity: 0;
+        transform: translateX(15%);
+    }
+}
+
+@keyframes slide-right {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%);
+        -webkit-transform: translateX(-50%);
+    }
+}
+
+@keyframes slide-up {
+    0% {
+        opacity: 0;
+        transform: translateY(50%);
+    }
+}
+
+@keyframes slide-down {
+    0% {
+        opacity: 0;
+        transform: translateY(-50%);
+    }
+}
+
+@keyframes scale-big {
+    0% {
+        transform: scale(0.6);
+    }
+}
+
+@keyframes chart-menu-open {
+    0% {
+        transform: translateX(10%);
+        width: 3em;
+        opacity: 0;
+    }
+}
+
+@keyframes fadein {
+    0% {
+        opacity: 0;
+    }
+}

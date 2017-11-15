@@ -1,0 +1,105 @@
+.hidden {
+    display: none !important;
+}
+
+.major {
+    background: $major-color;
+}
+
+.free-class {
+    background: $free-color;
+}
+
+.support {
+    background: $support-color;
+}
+
+.general-ed {
+    background: $general-color;
+}
+
+.minor {
+    background: $minor-color;
+}
+
+.concentration {
+    background: $concentration-color;
+}
+
+.popup-disabled, .disabled {
+    z-index: 30;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0,0,0,.3);
+    cursor: pointer;
+    touch-action: manipulation;
+    animation: fadein .15s;
+}
+
+.disabled {
+    z-index: 21;
+    display: none;
+}
+
+/* ANIMATION CLASSES */
+
+.moving-up {
+    animation: movingUp .35s;
+}
+
+.moving-down {
+    animation: movingDown .35s;
+}
+
+.moving-left {
+    animation: movingLeft .35s;
+}
+
+.moving-right {
+    animation: movingRight .35s;
+}
+
+.slide-up {
+    animation: show-block 0.35s;
+}
+
+.slide-out-left {
+    animation: slide-out-left .35s !important;
+}
+
+.slide-in-left {
+    animation: slide-in-left .35s !important;
+}
+
+.slide-in-right {
+    animation: slide-in-right .35s;
+}
+
+.slide-right {
+    animation: slide-right .35s;
+}
+
+.hide-block {
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: all .15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.desktop .hide-block {
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: all .15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.show-block {
+    animation: show-block .55s;
+}
+
+.desktop {
+    .show-block {
+        animation: show-block-desktop .55s;
+    }
+}

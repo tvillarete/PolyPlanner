@@ -1,0 +1,50 @@
+.year-holder {
+    display: flex;
+    flex-wrap: wrap;
+    animation: scale-big 1s;
+}
+
+.divider {
+    border-left: .1em solid lightgray;
+}
+
+.year {
+    position: relative;
+    width: 100%;
+    min-height: 50em;
+    display: flex;
+    flex-direction: column;
+    background: white;
+
+    &:first-child {
+        border-left: 0;
+    }
+
+    .head {
+        display: none;
+        position: relative;
+        line-height: 0;
+        text-align: center;
+
+        h2 {
+            margin: 0.5em auto;
+        }
+    }
+}
+
+.desktop {
+    .year-holder {
+        flex-wrap: nowrap;
+        margin: 0 auto;
+    }
+
+    .year {
+        padding-top: 1em;
+        min-width: 35em;
+        margin-left: 1.5em;
+    }
+
+    .head {
+        display: block !important;
+    }
+}

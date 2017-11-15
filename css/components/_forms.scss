@@ -1,0 +1,28 @@
+.menu-form, #chart-name-form {
+    width: 80%;
+    margin-left: 1.6em;
+
+    input {
+        margin: 0 !important;
+    }
+
+    input[type=submit], button {
+        appearance: none;
+        -webkit-appearance: none;
+        font-size: 1.3em;
+        height: 2em;
+        width: 6em;
+        margin: 1em 0 0.5em 0;
+        border: none;
+        border-radius: 2px;
+        background: $header-color;
+        color: white;
+        box-shadow: 0 2px 1px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+        outline: none;
+        cursor: pointer;
+    }
+
+    input[type=submit]:active, button:active {
+        filter: brightness(0.8)
+    }
+}

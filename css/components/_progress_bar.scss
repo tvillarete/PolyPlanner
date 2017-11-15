@@ -1,0 +1,15 @@
+#submit-progress {
+    top: auto !important;
+    width: 7.8em;
+    margin-top: -0.8em;
+    border-radius: 1px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    animation: slide-up 0.35s;
+}
+
+.desktop {
+    .progress-bar, .external-site-modal {
+        top: 4em;
+    }
+}

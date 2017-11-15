@@ -1,0 +1,262 @@
+.add-block-button {
+    height: 2.5em;
+    width: 90%;
+    line-height: 2.5em;
+    box-shadow: $bottom-box-shadow;
+    max-width: 9em;
+    margin: 0.5em auto;
+    color: #969696;
+    cursor: pointer;
+    visibility: hidden;
+
+    &:hover {
+        background: rgba(0, 0, 0, .05);
+    }
+}
+
+.subheader {
+    margin: 0;
+    text-transform: uppercase;
+    padding: 1em 0 0.5em 1.6em;
+    border-bottom: 1px solid rgba(0,0,0,0.12);
+    font-size: 1.5em;
+    letter-spacing: 1px;
+    color: rgb(100,100,100);
+}
+
+.floating-plus-button {
+    position: fixed;
+    bottom: 1em;
+    right: 1em;
+    height: 4em;
+    width: 4em;
+    background: $header-color;
+    color: white;
+    line-height: 4.6em;
+    text-align: center;
+    border-radius: 50%;
+    box-shadow: 0px 2px 5px #666;
+    cursor: pointer !important;
+    transition: all 0.15s ease-in-out;
+
+    &:hover {
+        filter: brightness(120%);
+    }
+
+    .edit-icon, .check-icon {
+        animation: spin 0.15s;
+    }
+}
+
+.course-info, .course-specify-button {
+    position: absolute;
+    display: none;
+    background: rgba(0,0,0,.15);
+    width: 2em;
+    margin: auto;
+    right: 0.5em;
+    bottom: 0.5em;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    transition: all .15s ease-in-out;
+    touch-action: manipulation;
+
+    &:hover {
+        background: rgba(0,0,0,.4);
+        box-shadow: $bottom-box-shadow;
+    }
+}
+
+.edit-block-button {
+    z-index: 1;
+    position: absolute;
+    visibility: hidden;
+    cursor: pointer;
+    height: 24px;
+    width: 24px;
+    margin: 0.2em;
+    border: 2px solid transparent;
+    background: rgba(150,150,150,0.7);
+    border-radius: 50%;
+    color: white;
+}
+
+/* Menu Modal */
+
+.menu-nav-buttons {
+    position: fixed;
+    display: flex;
+    z-index: 30;
+    height: 3em;
+    width: 8em;
+
+    .back-button {
+        cursor: pointer;
+        display: none;
+	font-size: 2.5em;
+        touch-action: manipulation;
+        animation: slide-in-right .15s;
+    }
+}
+
+.action-button {
+    height: 2.5em;
+    width: 10em;
+    background: $header-color;
+    border-radius: 4px;
+    margin: 1em;
+    text-align: center;
+    cursor: pointer;
+    color: white;
+    line-height: 2.5em;
+    box-shadow: $bottom-box-shadow;
+    transition: all 0.15s ease-in-out;
+
+    &:hover {
+        filter: brightness(120%);
+    }
+}
+
+.menu-option, .modal-sub-header, .menu-sub-header {
+    position: relative;
+    text-align: left;
+    margin: 0;
+    padding: 1em;
+    border-bottom: 1px solid rgba(0,0,0,.12);
+    box-sizing: border-box;
+    transition: all .15s ease-in-out;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+.menu-option {
+    display: flex;
+    justify-content: space-between;
+
+    &:active {
+        background: rgb(240,240,240);
+    }
+}
+
+.desktop {
+    .menu-option, .ui-autocomplete li {
+        &:hover {
+            background: rgb(245,245,245);
+        }
+
+        &:active {
+            background: rgb(240,240,240);
+        }
+    }
+}
+
+.chart-select-component {
+    position: relative;
+    min-height: 8em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-bottom: 1px solid rgba(0,0,0,0.12);
+    cursor: pointer;
+    border-left: 0.5em solid $header-color;
+    transition: all 0.15s ease-in-out;
+
+    .delete-chart-button {
+        line-height: 3.5em;
+    }
+
+    .chart-select-button {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        padding-top: 20px;
+    }
+
+    &.inactive {
+        min-height: 5em;
+        border-left: 0.5em solid white;
+
+        .curriculum-sheet-button {
+            display: none;
+        }
+
+        .delete-chart-button {
+            line-height: 2.2em;
+        }
+    }
+
+    &:hover {
+        background: rgba(0,0,0,0.02);
+    }
+
+    h3 {
+        margin: 0 0 0 1.7em;
+    }
+
+    .chart-name {
+        font-size: 1.125em;
+        font-weight: bold;
+    }
+
+    .chart-major {
+        color: rgb(100,100,100);
+        margin-top: 2px;
+        margin-left: 1.9em;
+        font-size: 1em;
+        font-weight: regular;
+    }
+}
+
+h3.curriculum-sheet-button {
+    position: absolute;
+    bottom: 20px;
+    background: dodgerblue;
+    color: white;
+    height: 2.5em;
+    line-height: 2.5em;
+    text-align: center;
+    width: 10em;
+    font-size: 0.875em;
+    font-weight: regular;
+    border-radius: 4px;
+    margin: 0.5em 0 0 2.2em;
+    cursor: pointer;
+}
+
+.flowchart-section {
+    flex: 1;
+    overflow: auto;
+}
+
+.add-chart-button {
+    min-height: 2.5em;
+    line-height: 2.3em;
+	text-align: center;
+    font-size: 2em;
+    color: #868686;
+    cursor: pointer;
+    transition: all 0.15s ease;
+
+
+    &:hover {
+        background: rgba(0,0,0,0.04);
+        color: $header-color;
+    }
+}
+
+.delete-chart-button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 1.1em;
+    font-size: 2em;
+    text-align: center;
+    transition: all 0.15s ease-in-out;
+
+    &:hover {
+        background: rgba(0,0,0,0.06);
+        color: red;
+    }
+}

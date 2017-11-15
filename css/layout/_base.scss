@@ -1,0 +1,67 @@
+body {
+    font: 100% $font-stack;
+    font-weight: 400;
+    color: $primary-color;
+    background: #fff;
+    -webkit-font-smoothing: subpixel-antialiased;
+}
+
+.base {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    top: 6em;
+    bottom: 0em;
+    left: 0em;
+    right: 0em;
+    padding: .5em;
+    border-radius: 4px;
+    overflow: auto;
+    background-color: $background-color;
+    -webkit-overflow-scrolling: touch;
+
+    &.base-editing {
+        .block-outline {
+            animation: jiggle 0.25s infinite;
+            transition: none;
+
+            &:nth-child(2n) {
+                animation-delay: 0.125s;
+            }
+        }
+
+        .block {
+            cursor: move;
+        }
+
+        .add-block-button {
+            visibility: visible;
+        }
+
+        .edit-block-button {
+            visibility: visible !important;
+        }
+
+        .ribbon {
+            display: none;
+        }
+
+        .course-info, .course-specify-button {
+            display: block;
+        }
+
+        @keyframes jiggle {
+            25% {
+                transform: rotate(1deg)
+            } 75% {
+                transform: translate(-1deg);
+            }
+        }
+    }
+}
+
+.desktop {
+    .base {
+        top: 4em;
+    }
+}

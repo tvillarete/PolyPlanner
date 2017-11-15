@@ -1,0 +1,47 @@
+.welcome-container {
+    position: fixed;
+    z-index: 20;
+    background: white;
+    top: 0;
+    padding-top: 5em;
+    bottom: 20%;
+    left: 0;
+    right: 0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .logo {
+        animation: welcome-fade 2s;
+    }
+
+    h3 {
+        font-family: 'julius sans one';
+        font-weight: 400;
+        color: darkgray;
+        animation: 2s ease 0s normal welcome-fade;
+    }
+
+    &.fade-white {
+        .logo, h3, h4 {
+            opacity: 0;
+            transition: all .15s ease-in-out;
+        }
+    }
+
+    .button {
+        font-size: 1.3em;
+        height: 2em;
+        line-height: 2em;
+        width: 6em;
+        margin: 0.5em auto;
+        border-radius: 2px;
+        background: rgb(150, 150, 150);
+        color: white;
+        box-shadow: 0 2px 1px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+        cursor: pointer;
+        animation: delayed-fade 3s;
+    }
+}
+

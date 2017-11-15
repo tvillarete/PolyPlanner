@@ -1,0 +1,74 @@
+.menu-modal {
+    position: relative;
+    display: none;
+	flex-direction: column;
+    position: fixed;
+    overflow: auto;
+    z-index: 23;
+    top: 0;
+    left: 0;
+    right: 0;
+    max-width: 300px;
+    padding-top: 3.5em;
+    bottom: 0;
+    background: white;
+    animation: slide-right .25s;
+    box-shadow: 0 2px 50px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
+    -webkit-overflow-scrolling: touch;
+}
+
+.menu-logo-container {
+    position: relative;
+    height: 10em;
+    transition:  all 0.15s ease-in-out;
+
+    .logo {
+        height: 8em;
+        width: 8em;
+        border: none;
+        box-shadow: none;
+        margin: 1.5em auto;
+        background: url(img/logo_2.png) no-repeat;
+        background-size: contain;
+    }
+}
+
+.menu-profile-section {
+    display: flex;
+    justify-content: space-around;
+    color: #0f4315;
+
+    h3 {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+.modal-header {
+    text-align: left;
+    padding-left: .7em;
+}
+
+.modal-subheader {
+    text-align: left;
+    padding-left: .7em;
+    margin: 0;
+    margin-top: -1em;
+    padding-left: 1.5em;
+    color: rgba(0,0,0,.52);
+}
+
+.login-img-container {
+    text-align: center;
+
+    img {
+        max-height: 3em;
+    }
+}
+
+.login-error-text {
+    margin-top: 1em;
+    color: red;
+    margin-bottom: -0.5em;
+}
+

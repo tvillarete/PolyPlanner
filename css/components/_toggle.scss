@@ -1,0 +1,52 @@
+.toggle {
+    position: absolute;
+    cursor: pointer;
+    margin: auto;
+    height: 1.8em;
+    width: 3.2em;
+    background-color: #ccc;
+    transition: .15s;
+    border-radius: 34px;
+
+
+    &:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: .3s;
+        border-radius: 50%;
+    }
+}
+
+.switch {
+    position: absolute;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+    top: 0.75em;
+    right: 0.5em;
+
+    input {
+        position: absolute;
+        left: 15em;
+        display: none;
+    }
+}
+
+input:checked + .toggle {
+    background-color: $header-color;
+}
+
+input:focus + .toggle {
+    box-shadow: 0 0 1px #036228;
+}
+
+input:checked + .toggle:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
