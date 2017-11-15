@@ -3,6 +3,8 @@ var completedUnits = {ge: 0, support: 0, major: 0};
 
 var Chart = {
     courses: [],
+    ge_areas: ['A1', 'A2', 'A3', 'B1', 'B2', 'B3', 'B6', 'C1', 'C2', 'C3', 'C4', 'D1', 'D2', 'D3', 'D4'],
+    ge_count: 0,
 
     init: () => {
         var startYear = ChartUpdater.getStartYear();
@@ -64,6 +66,7 @@ var Chart = {
 
     clear: () => {
         $('.year-holder').empty();
+        Chart.ge_count = 0;
     },
 
     curriculumSheet: (title) => {
@@ -120,11 +123,20 @@ var Chart = {
         ChartEditor.deleteSelectedBlocks();
     },
 
+    getGeArea: () => {
+        if (Chart.ge_count == Chart.ge_areas.length) {
+            Chart.ge_count = 0;
+        }
+        return Chart.ge_areas[Chart.ge_count++];
+    },
+
     displayPopup: (name, catalog, description, prereqs, units, type) => {
        $('.popup-disabled').show();
-       $('body').append(
-           Popup.courseInfo(name, catalog, description, prereqs, units, type)
-       );
+       var popup = Popup.courseInfo(name, catalog, description, prereqs, units, type);
+       if (catalog === 'General Ed') {
+            popup = Popup.emptyCourseInfo(name, catalog, units, type);
+       }
+       $('body').append(popup);
     },
 
     closePopup: () => {

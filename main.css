@@ -196,8 +196,8 @@ h3, h4, h5, h6 {
 
 .floating-plus-button {
   position: fixed;
-  bottom: 1em;
-  right: 1em;
+  bottom: 2em;
+  right: 2em;
   height: 4em;
   width: 4em;
   background: #16AC61;
@@ -345,7 +345,14 @@ h3.curriculum-sheet-button {
   font-weight: regular;
   border-radius: 4px;
   margin: 0.5em 0 0 2.2em;
-  cursor: pointer; }
+  cursor: pointer;
+  transition: all 0.15s ease-in-out; }
+  h3.curriculum-sheet-button:hover {
+    box-shadow: 0px 3px 0px #0255a7;
+    transform: translateY(-3px); }
+  h3.curriculum-sheet-button:active {
+    box-shadow: none;
+    transform: translateY(0px); }
 
 .flowchart-section {
   flex: 1;
@@ -584,6 +591,8 @@ input:checked + .toggle:before {
   padding-bottom: 10em; }
   .quarter.current-quarter .quarter-head h4 {
     color: #16AC61; }
+    .quarter.current-quarter .quarter-head h4:first-child {
+      font-weight: bold; }
   .quarter:first-child {
     border-left: none; }
 
@@ -795,6 +804,12 @@ input:checked + .toggle:before {
   .popup-window .button-container {
     display: flex;
     justify-content: center; }
+  .popup-window .empty-popup-container {
+    justify-content: center;
+    height: 11em;
+    line-height: 8em;
+    font-size: 1.7em;
+    color: #646464; }
   .popup-window .popup-button {
     height: 0.5em;
     line-height: 0.5em;
@@ -802,7 +817,14 @@ input:checked + .toggle:before {
     color: white;
     border-radius: 4px;
     background: dodgerblue;
-    cursor: pointer; }
+    cursor: pointer;
+    transition: all 0.15s ease-in-out; }
+    .popup-window .popup-button:hover {
+      box-shadow: 0 3px 0 #0255a7;
+      transform: translateY(-3px); }
+    .popup-window .popup-button:active {
+      box-shadow: none;
+      transform: translateY(0); }
 
 /* Layout */
 .header {
@@ -971,8 +993,10 @@ body {
   background-color: white;
   -webkit-overflow-scrolling: touch; }
   .base.base-editing .block-outline {
-    animation: jiggle 0.25s infinite;
+    animation: wiggle 0.25s infinite;
     transition: none; }
+    .base.base-editing .block-outline:hover {
+      animation: none; }
     .base.base-editing .block-outline:nth-child(2n) {
       animation-delay: 0.125s; }
   .base.base-editing .block {
@@ -985,11 +1009,11 @@ body {
     display: none; }
   .base.base-editing .course-info, .base.base-editing .course-specify-button {
     display: block; }
-@keyframes jiggle {
+@keyframes wiggle {
   25% {
-    transform: rotate(1deg); }
+    transform: rotate(-1deg); }
   75% {
-    transform: translate(-1deg); } }
+    transform: translate(1deg); } }
 .desktop .base {
   top: 4em; }
 
@@ -1079,8 +1103,7 @@ body {
     top: 9em;
     bottom: 0;
     left: 0;
-    right: 0;
-    overflow: auto; }
+    right: 0; }
     .external-site-modal .site-container embed {
       height: 100%;
       width: 100%; }

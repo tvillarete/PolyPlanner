@@ -26,8 +26,8 @@
 
 .floating-plus-button {
     position: fixed;
-    bottom: 1em;
-    right: 1em;
+    bottom: 2em;
+    right: 2em;
     height: 4em;
     width: 4em;
     background: $header-color;
@@ -222,6 +222,17 @@ h3.curriculum-sheet-button {
     border-radius: 4px;
     margin: 0.5em 0 0 2.2em;
     cursor: pointer;
+    transition: all 0.15s ease-in-out;
+
+    &:hover {
+        box-shadow: 0px 3px 0px #0255a7 ;
+        transform: translateY(-3px);
+    }
+
+    &:active {
+        box-shadow: none;
+        transform: translateY(0px);
+    }
 }
 
 .flowchart-section {

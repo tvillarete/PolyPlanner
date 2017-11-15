@@ -79,6 +79,14 @@
         justify-content: center;
     }
 
+    .empty-popup-container {
+        justify-content: center;
+        height: 11em;
+        line-height: 8em;
+        font-size: 1.7em;
+        color: rgb(100,100,100);
+    }
+
     .popup-button {
         height: 0.5em;
         line-height: 0.5em;
@@ -87,5 +95,16 @@
         border-radius: 4px;
         background: dodgerblue;
         cursor: pointer;
+        transition: all 0.15s ease-in-out;
+
+        &:hover {
+            box-shadow: 0 3px 0 #0255a7;
+            transform: translateY(-3px);
+        }
+
+        &:active {
+            box-shadow: none;
+            transform: translateY(0);
+        }
     }
 }

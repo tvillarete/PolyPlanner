@@ -22,8 +22,12 @@ body {
 
     &.base-editing {
         .block-outline {
-            animation: jiggle 0.25s infinite;
+            animation: wiggle 0.25s infinite;
             transition: none;
+
+            &:hover {
+                animation: none;
+            }
 
             &:nth-child(2n) {
                 animation-delay: 0.125s;
@@ -50,11 +54,11 @@ body {
             display: block;
         }
 
-        @keyframes jiggle {
+        @keyframes wiggle {
             25% {
-                transform: rotate(1deg)
+                transform: rotate(-1deg)
             } 75% {
-                transform: translate(-1deg);
+                transform: translate(1deg);
             }
         }
     }

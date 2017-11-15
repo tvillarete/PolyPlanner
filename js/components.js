@@ -153,7 +153,7 @@ function newBlockComponent(block_metadata, course_data, course_type = null, id =
     var units = course_data.units;
     return `
         <div class="block-outline show-block"
-         onmouseup="Chart.displayPopup('${name}', '${catalog}', '${desc}',
+         onmouseup="ChartEditor.determineBlockAction(this, '${name}', '${catalog}', '${desc}',
                                        '${prereqs}', '${units}', '${course_type}')">
             <div class="edit-block-button">
                 <i class="material-icons">check</i>
@@ -207,7 +207,7 @@ function newMultiBlockComponent(block_metadata, course_data) {
     });
     block = block.concat(`
                 </div>
-                <div class="course-specify-button" onclick="openMultiCourseSelector(this.parentNode)">+</div>
+                <div class="course-specify-button" onclick="openMultiCourseSelector(this.parentNode); return false;">+</div>
             </div>
         </div>
     `);
@@ -218,16 +218,18 @@ function newElectiveBlockComponent(block_metadata) {
     var course_type = block_metadata.course_type.toLowerCase().split(' ').join("-");
     var title = block_metadata.elective_title ? block_metadata.elective_title :
      block_metadata.course_type;
+    var area = course_type === 'general-ed' ? `Area ${Chart.getGeArea()}` : '';
     return `
-        <div class="block-outline show-block elective-block"
-         onclick="ChartEditor.determineBlockAction(this, '${null}', '${null}',
-          '${null}', '${null}', '${null}')">
+        <div class="block-outline show-block ${area !== '' ? 'ge-block' : 'elective-block'}"
+         onclick="ChartEditor.determineBlockAction(this, '${area}', '${title}',
+          '', '', 4, '${course_type}')">
             <div class="edit-block-button">
                 <i class="material-icons">check</i>
             </div>
             <div class="block ${course_type}" id="${block_metadata._id}" value="4">
                 <div class="ribbon"></div>
                 <h3 class="block-catalog-info"><b>${title}</b></h3>
+                <h5 class="block-title">${area}</h5>
                 <h5 class="block-unit-count"><b>4 Units</b></h5>
                 <div class="course-specify-button" onclick="openCourseSelector(this.parentNode)">+</div>
             </div>
@@ -450,6 +452,30 @@ var Popup = {
                  onclick="window.open('http://polyratings.com/search.php?type=Class&terms=${dept}+${num}&format=long&sort=rating')">
                     Check PolyRatings
                  </div>
+            </div>
+        </div>
+
+        `;
+    },
+
+    emptyCourseInfo: (name, catalog, units, type) => {
+        var dept = catalog.split(' ')[0];
+        var num = catalog.split(' ')[1];
+        return `
+        <div class="popup-window">
+            <div class="popup-header ${type}">
+                <div class="popup-title-container">
+                    <h3><b>${catalog}</b></h3>
+                    <h3>${name}</h3>
+                </div>
+                <div class="close-popup-container">
+                    <h3 id="close-popup-button"
+                     onclick="Chart.closePopup()">&times;</h3>
+                    <h3 id="popup-unit-count">${units} units</h3>
+                </div>
+            </div>
+            <div class="popup-section empty-popup-container">
+                <h3>No course picked yet</h3>
             </div>
         </div>
 

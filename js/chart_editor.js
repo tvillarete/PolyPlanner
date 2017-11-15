@@ -17,13 +17,13 @@ var ChartEditor = {
         }, 400);
     },
 
-    determineBlockAction: (block, name, desc, prereqs, dept, course_number) => {
+    determineBlockAction: (block, name, catalog, desc, prereqs, units, course_type) => {
         clearTimeout(timeoutId);
-        if (!isLongPress && $('.base').hasClass('base-editing')) {
+        if ($('.base').hasClass('base-editing')) {
             ChartEditor.select(block);
         } else if (!$(block).hasClass('multi-block') && !$(block).hasClass('elective-block')) {
+            Chart.displayPopup(name, catalog, desc, prereqs, units, course_type);
         }
-        isLongPress = false;
     },
 
     replaceBlock: (blockId, courseUrl) => {

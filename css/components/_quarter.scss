@@ -23,6 +23,10 @@
     &.current-quarter {
         .quarter-head h4 {
             color: $header-color;
+
+            &:first-child {
+                font-weight: bold;
+            }
         }
     }
 
