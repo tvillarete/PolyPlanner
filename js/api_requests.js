@@ -12,6 +12,16 @@ var API = {
         );
 
         request.done(function(config) {
+            var guestConfig = User.data();
+            if (guestConfig.charts && guestConfig.username === 'cpslo-guest') {
+                var username = config.username.split('-')[1];
+                config.active_chart = guestConfig.active_chart;
+
+                $.each(guestConfig.charts, function(key, value) {
+                    API.importChart(value, key, username, true);
+                    config.charts[key] = value;
+                });
+            }
             User.logged_in = true;
             User.update(config);
             Menu.init();
@@ -30,8 +40,10 @@ var API = {
 
     },
 
-    importChart: (major, name) => {
-        var url = `${API.url}/users/${User.username()}/import`;
+    importChart: (major, name, username, login) => {
+        console.log(`Major: ${major}, Name: ${name}`);
+        username = username ? username : User.username();
+        var url = `${API.url}/users/${username}/import`;
         var data = JSON.stringify({
             "target": major,
             "year": "15-17",
@@ -40,8 +52,9 @@ var API = {
         var request = API.newRequest('POST', url, 'application/json', data)
 
         request.done(function(response) {
-            console.log("Success!", response);
-            Chart.init();
+            if (!login) {
+                Menu.init();
+            }
         });
 
         request.fail(function(response) {
@@ -54,6 +67,7 @@ var API = {
 
         request.done(function(response) {
             console.log(response);
+            API.getUserConfig();
         });
 
         request.fail(function(response) {
@@ -98,12 +112,13 @@ var API = {
         if (User.logged_in) {
             var chart = User.getActiveChart();
             var contentType = 'application/json';
-            var request = API.newRequest('POST', `${API.url}/users/${User.username()}/charts/`, contentType);
+            var request = API.newRequest('POST', `${API.url}/users/${User.username()}/charts`, contentType);
         }
     },
 
-    deleteChart: () => {
-
+    deleteChart: (name) => {
+        var url = `${API.url}/users/${User.username()}/charts/${name}`;
+        var request = API.newRequest('DELETE', url);
     },
 
     getCourseById: () => {

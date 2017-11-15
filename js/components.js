@@ -148,8 +148,6 @@ function newBlockComponent(block_metadata, course_data, course_type = null, id =
     }
     return `
         <div class="block-outline show-block"
-         ontouchstart="ChartEditor.setTapCounter(this)"
-
          onmouseup="ChartEditor.determineBlockAction(this, '${course_data.title}',
           '${course_data.description}', '${course_data.prereqs}', '${course_data.dept}',
           '${course_data.course_number}')">
@@ -303,21 +301,6 @@ function newChartNamerView(newMajor) {
             <button class="slide-in-right" onclick="User.addChart('${newMajor}')">Submit</button>
         </form>
     `;
-}
-
-function newUserChartBrowserView() {
-    var title = `${User.username()} Charts`;
-    var view = Button.header(title);
-    var charts = User.getCharts();
-
-    $.each(charts, function(name, value) {
-        view = view.concat(
-            Button.menuOption('', "User.setActiveChart('"+name+"')", name, '')
-        );
-    });
-
-    view = view.concat(Button.actionButton('Add a Flowchart', "changeWindow('chart-year-browser')"));
-    return view;
 }
 
 function newMultiCourseSelectorView(courseNames) {
@@ -479,7 +462,7 @@ var MenuView = {
         });
         view = view.concat(`
             <div class="add-chart-button slide-up"
-             onclick="changeWindow('chart-year-browser')">&plus;
+             onclick="User.getStartYear()">&plus;
             </div>
         `);
 

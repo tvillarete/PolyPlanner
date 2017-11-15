@@ -98,6 +98,10 @@ var Chart = {
 
     remove: (name, major) => {
         var config = User.data();
+
+        if (User.logged_in) {
+            API.deleteChart(name);
+        }
         delete config.charts[name];
         var newActive = Object.keys(config.charts)[0];
         config.active_chart = newActive ? newActive : '';
@@ -192,20 +196,29 @@ var User = {
         return config.charts;
     },
 
+    getStartYear: () => {
+        var config = User.data();
+        if (config.start_year) {
+            changeWindow('chart-browser');
+        } else {
+            changeWindow('chart-year-browser')
+        }
+    },
+
     addChart: (major) => {
         var title = $('#chart-name-input').val();
+        $('#chart-name-input').blur();
         var config = User.data();
 
         config.charts[`${title}`] = major;
         config.active_chart = title;
+        User.update(config);
 
         if (User.logged_in) {
             API.importChart(major, title);
-            API.updateUserConfig(config);
         } else {
-            User.update(config);
+            Menu.init();
         }
-        Menu.init();
     },
 
     update: (newConfig) => {

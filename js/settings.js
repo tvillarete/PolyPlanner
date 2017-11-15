@@ -42,19 +42,11 @@ function guestConfigExists() {
 }
 
 function changeStartYear(yearItem, chartBrowser) {
-    startYear = parseInt($(yearItem).text());
-    if (userConfigExists()) {
-        userConfig.start_year = startYear;
-        if (!chartBrowser) {
-            sendUserConfig();
-        }
-    } else if (localStorage.guestConfig) {
-        guestConfig = JSON.parse(localStorage.guestConfig);
-        guestConfig.start_year = startYear;
-        localStorage.guestConfig = JSON.stringify(guestConfig);
-    } else {
+    var startYear = parseInt($(yearItem).text());
+    var config = User.data();
 
-    }
+    config.start_year = startYear;
+    User.update(config);
 
     if (chartBrowser == 'true') {
         changeWindow('chart-browser');
