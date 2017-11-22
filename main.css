@@ -216,8 +216,8 @@ h3, h4, h5, h6 {
 .course-info, .course-specify-button {
   position: absolute;
   display: none;
-  background: rgba(0, 0, 0, 0.15);
-  width: 2em;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 0.1em 0.4em 0 0.4em;
   margin: auto;
   right: 0.5em;
   bottom: 0.5em;
@@ -332,27 +332,29 @@ h3, h4, h5, h6 {
     font-size: 1em;
     font-weight: regular; }
 
-h3.curriculum-sheet-button {
-  position: absolute;
-  bottom: 20px;
+.button {
   background: dodgerblue;
   color: white;
   height: 2.5em;
   line-height: 2.5em;
   text-align: center;
-  width: 10em;
   font-size: 0.875em;
   font-weight: regular;
   border-radius: 4px;
-  margin: 0.5em 0 0 2.2em;
   cursor: pointer;
   transition: all 0.15s ease-in-out; }
-  h3.curriculum-sheet-button:hover {
+  .button:hover {
     box-shadow: 0px 3px 0px #0255a7;
     transform: translateY(-3px); }
-  h3.curriculum-sheet-button:active {
+  .button:active {
     box-shadow: none;
     transform: translateY(0px); }
+
+h3.curriculum-sheet-button {
+  position: absolute;
+  bottom: 20px;
+  width: 10em;
+  margin: 0.5em 0 0 2.2em; }
 
 .flowchart-section {
   flex: 1;
@@ -473,67 +475,90 @@ input:checked + .toggle:before {
   display: flex;
   flex-direction: column;
   justify-content: center; }
+  .welcome-container .logo-container {
+    height: 12em;
+    width: 12em; }
   .welcome-container .logo {
+    height: 12em;
+    width: auto;
     animation: welcome-fade 2s; }
   .welcome-container h3 {
     font-family: 'julius sans one';
     font-weight: 400;
-    color: darkgray;
+    color: #636262;
+    font-size: 2.3em;
+    margin: 0.5em;
     animation: 2s ease 0s normal welcome-fade; }
-  .welcome-container.fade-white .logo, .welcome-container.fade-white h3, .welcome-container.fade-white h4 {
+  .welcome-container.fade-white .logo {
+    filter: grayscale(100%) opacity(60%);
+    transition: all .15s ease-in-out; }
+  .welcome-container.fade-white h3, .welcome-container.fade-white h4, .welcome-container.fade-white .button {
     opacity: 0;
     transition: all .15s ease-in-out; }
-  .welcome-container .button {
+  .welcome-container #get-started-button {
     font-size: 1.3em;
     height: 2em;
     line-height: 2em;
     width: 6em;
     margin: 0.5em auto;
-    border-radius: 2px;
-    background: #969696;
-    color: white;
-    box-shadow: 0 2px 1px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-    cursor: pointer;
     animation: delayed-fade 3s; }
 
-.logo {
-  position: relative;
-  height: 10em;
-  width: 10em;
-  border: 1px solid #16AC61;
-  margin: 1em auto;
-  font-family: 'julius sans one';
-  background: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); }
-  .logo .logo-letter {
+/*.logo {
     position: relative;
-    height: 100%;
-    width: 100%;
-    display: flex;
-    flex-direction: column; }
-    .logo .logo-letter #top-f {
-      background: #16AC61;
-      height: 3.1em;
-      width: 6em;
-      margin: .05em;
-      margin-left: 2em;
-      margin-top: 1.1em; }
-    .logo .logo-letter #bottom-f {
-      background: #16AC61;
-      height: 2.6em;
-      width: 3.25em;
-      margin: .05em;
-      margin-left: 2em; }
-  .logo .bottom-text {
-    background: #16AC61;
-    position: absolute;
-    bottom: 0;
-    height: 1.5em;
-    width: 100%;
-    font-size: 22px;
-    line-height: 1.5em;
-    text-align: center;
-    color: white; }
+    height: 10em;
+    width: 10em;
+    border: 1px solid $header-color;
+    margin: 1em auto;
+    font-family: 'julius sans one';
+    background: white;
+    box-shadow: $bottom-box-shadow;
+
+    .logo-letter {
+        position: relative;
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+
+        #top-f {
+            background: $header-color;
+            height: 3.1em;
+            width: 6em;
+            margin: .05em;
+            margin-left: 2em;
+            margin-top: 1.1em;
+        }
+
+        #bottom-f {
+            background: $header-color;
+            height: 2.6em;
+            width: 3.25em;
+            margin: .05em;
+            margin-left: 2em;
+        }
+    }
+
+    .bottom-text {
+        background: $header-color;
+        position: absolute;
+        bottom: 0;
+        height: 1.5em;
+        width: 100%;
+        font-size: 22px;
+        line-height: 1.5em;
+        text-align: center;
+        color: white;
+    }
+}*/
+.logo-container {
+  height: 8em;
+  width: 8em;
+  margin: 0 auto; }
+
+.logo {
+  height: 100%;
+  width: auto;
+  background: url("img/logo.svg") no-repeat center; }
 
 .year-holder {
   display: flex;
@@ -763,26 +788,31 @@ input:checked + .toggle:before {
   background: white;
   box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
   animation: movingUp 0.15s; }
+  @media screen and (max-width: 750px) {
+    .popup-window {
+      max-height: none;
+      max-width: none; } }
   .popup-window .popup-header {
     display: flex;
     justify-content: space-between;
-    height: 6em;
     padding: 1em 1em 1em 2em; }
     .popup-window .popup-header h3 {
       margin: 0.5em 0;
       font-size: 1.6em;
       color: rgba(0, 0, 0, 0.65); }
+  .popup-window .popup-title-container {
+    flex: 1; }
   .popup-window .close-popup-container {
     display: flex;
     flex-direction: column;
     text-align: right; }
     .popup-window .close-popup-container #close-popup-button {
       font-size: 2.5em;
-      margin: 0;
+      margin: 8px 0 0 0;
       line-height: 0;
       cursor: pointer; }
     .popup-window .close-popup-container #popup-unit-count {
-      margin-top: 4em;
+      margin-top: 3.5em;
       font-size: 1em;
       font-weight: bold; }
   .popup-window .popup-section {
@@ -994,7 +1024,8 @@ body {
   -webkit-overflow-scrolling: touch; }
   .base.base-editing .block-outline {
     animation: wiggle 0.25s infinite;
-    transition: none; }
+    transition: none;
+    transform: translateY(0); }
     .base.base-editing .block-outline:hover {
       animation: none; }
     .base.base-editing .block-outline:nth-child(2n) {

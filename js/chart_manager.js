@@ -72,7 +72,7 @@ var Chart = {
     curriculumSheet: (title) => {
         var startYear = ChartUpdater.getStartYear() - 2000;
 
-        var url = `/tester/pdf/${title}.pdf`;
+        var url = `/PolyPlanner/pdf/${title}.pdf`;
         $('.site-container').html(`<embed src="${url}"/>`);
         closeMenu();
         $('.external-site-modal').show();
@@ -130,7 +130,7 @@ var Chart = {
         return Chart.ge_areas[Chart.ge_count++];
     },
 
-    displayPopup: (name, catalog, description, prereqs, units, type) => {
+    displayPopup: (name, catalog, description, prereqs, units, type, isTech) => {
        $('.popup-disabled').show();
        var popup = Popup.courseInfo(name, catalog, description, prereqs, units, type);
        if (catalog === 'General Ed') {

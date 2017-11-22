@@ -24,6 +24,7 @@ body {
         .block-outline {
             animation: wiggle 0.25s infinite;
             transition: none;
+            transform: translateY(0);
 
             &:hover {
                 animation: none;

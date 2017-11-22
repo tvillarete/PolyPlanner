@@ -1,4 +1,4 @@
-.logo {
+/*.logo {
     position: relative;
     height: 10em;
     width: 10em;
@@ -44,4 +44,16 @@
         text-align: center;
         color: white;
     }
+}*/
+
+.logo-container {
+    height: 8em;
+    width: 8em;
+    margin: 0 auto;
+}
+
+.logo {
+    height: 100%;
+    width: auto;
+    background: url("img/logo.svg") no-repeat center;
 }

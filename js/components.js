@@ -43,7 +43,7 @@ var Button = {
 
     curriculumSheet: (major) => {
         return `
-            <h3 class="curriculum-sheet-button"
+            <h3 class="button curriculum-sheet-button"
              onclick="Chart.curriculumSheet('${major}'); return false">
                 Curriculum Sheet
             </h3>
@@ -207,7 +207,9 @@ function newMultiBlockComponent(block_metadata, course_data) {
     });
     block = block.concat(`
                 </div>
-                <div class="course-specify-button" onclick="openMultiCourseSelector(this.parentNode); return false;">+</div>
+                <div class="course-specify-button" onclick="openMultiCourseSelector(this.parentNode); return false;">
+                    <i class="material-icons">edit</i>
+                </div>
             </div>
         </div>
     `);
@@ -231,7 +233,9 @@ function newElectiveBlockComponent(block_metadata) {
                 <h3 class="block-catalog-info"><b>${title}</b></h3>
                 <h5 class="block-title">${area}</h5>
                 <h5 class="block-unit-count"><b>4 Units</b></h5>
-                <div class="course-specify-button" onclick="openCourseSelector(this.parentNode)">+</div>
+                <div class="course-specify-button" onclick="openCourseSelector(this.parentNode)">
+                    <i class="material-icons">edit</i>
+                </div>
             </div>
         </div>
     `;
@@ -314,9 +318,11 @@ function newMultiCourseSelectorView(courseNames) {
     var id = courseNames[0];
     courseNames.forEach(function(course, index) {
         if (index > 0) {
-            var courseUrl = course.split(' ').join('/');
+            var courseUrl = course.trim().split(' ').join('/');
+            console.log(courseUrl);
+
             view = view.concat(
-                Button.menuOption('', "ChartEditor.replaceBlock('"+id+"', '"+courseUrl+"')", course, 'keyboard_arrow_right')
+                Button.menuOption('', `ChartEditor.replaceBlock('${id}', '${courseUrl}')`, course, 'keyboard_arrow_right')
             );
         }
     });

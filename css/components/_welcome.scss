@@ -12,35 +12,44 @@
     flex-direction: column;
     justify-content: center;
 
+    .logo-container {
+        height: 12em;
+        width: 12em;
+    }
+
     .logo {
+        height: 12em;
+        width: auto;
         animation: welcome-fade 2s;
     }
 
     h3 {
         font-family: 'julius sans one';
         font-weight: 400;
-        color: darkgray;
+        color: #636262;
+        font-size: 2.3em;
+        margin: 0.5em;
         animation: 2s ease 0s normal welcome-fade;
     }
 
     &.fade-white {
-        .logo, h3, h4 {
+        .logo {
+            filter: grayscale(100%) opacity(60%);
+            transition: all .15s ease-in-out;
+        }
+
+        h3, h4, .button {
             opacity: 0;
             transition: all .15s ease-in-out;
         }
     }
 
-    .button {
+    #get-started-button {
         font-size: 1.3em;
         height: 2em;
         line-height: 2em;
         width: 6em;
         margin: 0.5em auto;
-        border-radius: 2px;
-        background: rgb(150, 150, 150);
-        color: white;
-        box-shadow: 0 2px 1px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-        cursor: pointer;
         animation: delayed-fade 3s;
     }
 }

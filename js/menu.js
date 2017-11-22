@@ -1,6 +1,7 @@
 var Menu = {
     init: () => {
         var $menuModal = $('.menu-modal');
+        emptyStack();
         $menuModal.empty();
         $('.back-button').fadeOut('fast');
         $menuModal.append(
@@ -38,7 +39,7 @@ function saveChartInfo(newMajor) {
 
 function openMenu() {
     $(".welcome-container").addClass("fade-white");
-    $(".welcome-container .button, .floating-plus-button").fadeOut("fast");
+    $(".floating-plus-button").fadeOut("fast");
 
     if (menuStack.length > 0) {
         $(".back-button").show();

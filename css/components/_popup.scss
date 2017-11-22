@@ -14,10 +14,14 @@
     box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
     animation: movingUp 0.15s;
 
+    @media screen and (max-width: 750px) {
+        max-height: none;
+        max-width: none;
+    }
+
     .popup-header {
         display: flex;
         justify-content: space-between;
-        height: 6em;
         padding: 1em 1em 1em 2em;
 
         h3 {
@@ -27,6 +31,10 @@
         }
     }
 
+    .popup-title-container {
+        flex: 1;
+    }
+
     .close-popup-container {
         display: flex;
         flex-direction: column;
@@ -34,13 +42,13 @@
 
         #close-popup-button {
             font-size: 2.5em;
-            margin: 0;
+            margin: 8px 0 0 0;
             line-height: 0;
             cursor: pointer;
         }
 
         #popup-unit-count {
-            margin-top: 4em;
+            margin-top: 3.5em;
             font-size: 1em;
             font-weight: bold;
         }

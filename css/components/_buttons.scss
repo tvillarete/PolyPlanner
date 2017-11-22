@@ -51,8 +51,8 @@
 .course-info, .course-specify-button {
     position: absolute;
     display: none;
-    background: rgba(0,0,0,.15);
-    width: 2em;
+    background: rgba(0,0,0, 0.25);
+    padding: 0.1em 0.4em 0 0.4em;
     margin: auto;
     right: 0.5em;
     bottom: 0.5em;
@@ -208,19 +208,15 @@
     }
 }
 
-h3.curriculum-sheet-button {
-    position: absolute;
-    bottom: 20px;
+.button {
     background: dodgerblue;
     color: white;
     height: 2.5em;
     line-height: 2.5em;
     text-align: center;
-    width: 10em;
     font-size: 0.875em;
     font-weight: regular;
     border-radius: 4px;
-    margin: 0.5em 0 0 2.2em;
     cursor: pointer;
     transition: all 0.15s ease-in-out;
 
@@ -233,6 +229,13 @@ h3.curriculum-sheet-button {
         box-shadow: none;
         transform: translateY(0px);
     }
+}
+
+h3.curriculum-sheet-button {
+    position: absolute;
+    bottom: 20px;
+    width: 10em;
+    margin: 0.5em 0 0 2.2em;
 }
 
 .flowchart-section {

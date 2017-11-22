@@ -5,8 +5,6 @@ var ChartEditor = {
     select: blockId => {
         $(blockId).toggleClass("selected-block");
 
-        ChartEditor.edit();
-
         $("#selected-count-container").text(`${ChartUpdater.countSelectedBlocks()} selected`);
     },
 
@@ -23,6 +21,8 @@ var ChartEditor = {
             ChartEditor.select(block);
         } else if (!$(block).hasClass('multi-block') && !$(block).hasClass('elective-block')) {
             Chart.displayPopup(name, catalog, desc, prereqs, units, course_type);
+        } else {
+            Chart.displayPopup(name, catalog, desc, prereqs, units, course_type);
         }
     },
 
@@ -37,9 +37,10 @@ var ChartEditor = {
             block.parent().removeClass('multi-block elective-block');
             block.html(newBlockCourseDataView(data));
             block.attr("id", data._id);
+            block.parent().removeClass('selected-block');
         });
-        enableChart();
-        popStack();
+        Menu.init();
+        closeMenu();
     },
 
     deleteSelectedBlocks: () => {
