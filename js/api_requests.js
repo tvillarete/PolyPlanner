@@ -199,7 +199,7 @@ function deleteActiveChart() {
                 localStorage.userConfig = JSON.stringify(userConfig);
                 $(".welcome-container").show();
                 $(".header-title").text('Welcome');
-                openMenu();
+                Menu.open();
             }
         });
     } else {
@@ -209,8 +209,7 @@ function deleteActiveChart() {
         localStorage.guestConfig = JSON.stringify(guestConfig);
         $(".welcome-container").show();
         $(".header-title").text('Welcome');
-        openMenu();
-
+        Menu.open();
     }
 }
 

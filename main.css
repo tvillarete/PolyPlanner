@@ -407,6 +407,10 @@ h3.curriculum-sheet-button {
   .menu-form input[type=submit]:active, .menu-form button:active, #chart-name-form input[type=submit]:active, #chart-name-form button:active {
     filter: brightness(0.8); }
 
+.department-searchbar {
+  width: 90%;
+  margin: auto; }
+
 .toggle {
   position: absolute;
   cursor: pointer;
@@ -483,10 +487,10 @@ input:checked + .toggle:before {
     width: auto;
     animation: welcome-fade 2s; }
   .welcome-container h3 {
-    font-family: 'julius sans one';
+    font-family: avenir;
     font-weight: 400;
-    color: #636262;
-    font-size: 2.3em;
+    color: #15522c;
+    font-size: 2.5em;
     margin: 0.5em;
     animation: 2s ease 0s normal welcome-fade; }
   .welcome-container.fade-white .logo {

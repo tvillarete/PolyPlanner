@@ -1,11 +1,11 @@
 $(document).on('click', '.add-block-button', function() {
     if (!$(this).parent().hasClass("appending") || menuStack.length == 0) {
-        emptyStack();
+        Menu.init();
         $(".quarter").removeClass("appending");
         $(this).parent().addClass("appending");
         showCourseSelector();
     } else {
-        openMenu();
+        Menu.open();
     }
     disableChart();
 });
@@ -24,13 +24,13 @@ function setupBuilder() {
         $(".header-title").text("New Flowchart");
     }
     checkWindowSize();
-    closeMenu();
+    Menu.close();
 }
 
 function showCourseSelector() {
     changeWindow("department-selector", "Departments");
     setupAutocomplete('department-search');
-    openMenu();
+    Menu.open();
 }
 
 function setupAutocomplete(id) {
@@ -66,13 +66,14 @@ function newDepartmentSelectorView() {
 }
 
 function newCourseSelectorView() {
-    var element = "";
+    var element = "<div>";
     $.each(departmentCourses, function(index, value) {
         if (index > 0) {
             element = element.concat(`<h3 class="menu-option course-item slide-in-right"
              name="${departmentCourses[0] /* Department Name */}/${value}" onclick="fetchCourse(this)">${value}</h3>`);
         }
     });
+    element = element.concat('</div>');
     return element;
 }
 
@@ -129,11 +130,9 @@ function fetchCourse(courseItem) {
             $(course).insertBefore($('.appending .add-block-button'));
         }
 
-        emptyStack();
+        Menu.init();
     });
-    if ($(window).width() < 1000) {
-        closeMenu();
-    }
+    Menu.close();
 }
 
 function addCourseSpecifier(addComponent) {

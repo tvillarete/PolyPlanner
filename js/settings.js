@@ -51,7 +51,7 @@ function changeStartYear(yearItem, chartBrowser) {
     if (chartBrowser == 'true') {
         changeWindow('chart-browser');
     } else {
-        popStack();
+        Menu.back();
     }
     $(".year").each(function(key, el) {
         $(this).attr("name", parseInt($(yearItem).text())+key);

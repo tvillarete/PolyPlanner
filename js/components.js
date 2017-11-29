@@ -149,7 +149,9 @@ function newBlockComponent(block_metadata, course_data, course_type = null, id =
     var name = course_data.title;
     var catalog = `${course_data.dept} ${course_data.course_number}`;
     var desc = course_data.description;
+    desc = desc.replace("'", "");
     var prereqs = course_data.prereqs;
+    prereqs = prereqs ? prereqs.replace("'", "") : null;
     var units = course_data.units;
     return `
         <div class="block-outline show-block"
@@ -194,7 +196,7 @@ function newMultiBlockComponent(block_metadata, course_data) {
                 <div class="ribbon"></div>
                 <h5 class="block-catalog-info choose">Choose:</h5>
                 <div class="block-catalog">
-        `;
+    `;
     course_data.forEach(function(val, index) {
         if (index == 0 && numCourses == 2) {
             block = block.concat(`<h4 class="course-catalog-title">

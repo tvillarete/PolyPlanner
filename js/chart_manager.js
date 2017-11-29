@@ -74,7 +74,7 @@ var Chart = {
 
         var url = `/PolyPlanner/pdf/${title}.pdf`;
         $('.site-container').html(`<embed src="${url}"/>`);
-        closeMenu();
+        Menu.close();
         $('.external-site-modal').show();
     },
 

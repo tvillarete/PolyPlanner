@@ -6,7 +6,7 @@
         <link href="https://fonts.googleapis.com/css?family=Julius+Sans+One" rel="stylesheet">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link rel="stylesheet" href="css/animations.css">
-        <link rel="icon" href="/img/icon48.png">
+        <link rel="icon" href="/PolyPlanner/img/logo_2.png">
         <script src="js/plugins/jquery.js"></script>
         <script src="js/plugins/jquery-ui.js"></script>
         <script src="js/plugins/jquery-touch.js" ></script>
@@ -19,7 +19,7 @@
                 <img class="logo" src="img/logo.svg">
             </div>
             <h3>PolyPlanner</h3>
-            <div class="button" id="get-started-button" onclick="openMenu()">Start</div>
+            <div class="button" id="get-started-button" onclick="Menu.open()">Start</div>
         </div>
         <div class="menu-nav-buttons">
             <div id="menu-button">
@@ -28,7 +28,7 @@
                 <span></span>
                 <span></span>
             </div>
-	    <i class="material-icons back-button" onclick="popStack()">arrow_back</i>
+	    <i class="material-icons back-button" onclick="Menu.back()">arrow_back</i>
         </div>
         <div class="header">
             <div class=header-contents>
@@ -100,7 +100,7 @@
                 <i class="material-icons check-icon hidden">check</i>
             </div>
         </div>
-        <div class="disabled" id="disabled" onclick="closeMenu()"></div>
+        <div class="disabled" id="disabled" onclick="Menu.close()"></div>
         <div class="popup-disabled" onclick="Chart.closePopup()"></div>
         <div class="menu-modal"></div>
         <div class="external-site-modal">

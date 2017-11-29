@@ -40,7 +40,7 @@ var ChartEditor = {
             block.parent().removeClass('selected-block');
         });
         Menu.init();
-        closeMenu();
+        Menu.close();
     },
 
     deleteSelectedBlocks: () => {
@@ -91,14 +91,12 @@ var ChartEditor = {
         $('.menu-modal').children().css('opacity', '0');
         $('.edit-icon').addClass('hidden');
         $('.check-icon').removeClass('hidden');
-        closeMenu();
 
         if (!chartContainer.hasClass("base-editing")) {
             block.removeClass("show-block");
             chartContainer.addClass("base-editing");
             setupSortable(".block-outline",  ".block-option-container, .delete-block, .quarter-head, .edit-block-button", ".quarter, .block-drop");
-            $(".chart-menu-open-button").addClass('hidden');
-            $(".menu-nav-buttons").hide();
+            $(".chart-menu-open-button, .menu-nav-buttons").addClass('hidden');
             $(".edit-container").fadeIn("fast");
         }
 
@@ -111,13 +109,13 @@ var ChartEditor = {
         $('.menu-modal').children().css('opacity', '1');
         chartContainer.removeClass("base-editing");
         $(".selected-block").removeClass("selected-block");
-        $(".menu-nav-buttons").fadeIn();
+        $(".menu-nav-buttons").removeClass('hidden');
         $(".edit-container").fadeOut("fast");
         $(".chart-menu-open-button").removeClass('hidden');
         $('.edit-icon').removeClass('hidden');
         $('.check-icon').addClass('hidden');
 
-        emptyStack();
+        Menu.init();
 
         $('.quarter').sortable('destroy');
         toggleColorPalette(true);
@@ -209,11 +207,9 @@ var ChartUpdater = {
 
 function openCourseSelector(block) {
     var id = $(block).attr("id");
-    emptyStack();
     changeWindow("department-selector", "Departments", id) ;
     setupAutocomplete('department-search');
-    openMenu();
-    disableChart();
+    Menu.open();
     $(".block").removeClass('replaceable');
     $(block).addClass('replaceable');
 }
@@ -227,8 +223,8 @@ function enableChart() {
 }
 
 function openMultiCourseSelector(block) {
-    emptyStack();
-    openMenu();
+    Menu.init();
+    Menu.open();
     disableChart();
     var id = $(block).attr("id");
     var courseList = [];

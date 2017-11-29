@@ -1,7 +1,6 @@
 const apiURL = "/api/cpslo/"
 const course_types = ['Major', 'Free Class', 'Support', 'General Ed', 'Minor', 'Concentration'];
 
-var menuStack = [];
 var availableCharts = [];
 var departments = [];
 var departmentCourses = [];
@@ -28,10 +27,10 @@ $(document).ready(function() {
     $('#menu-button').click(function(){
         if (!$(this).hasClass("open")) {
             $(this).addClass('open');
-            openMenu();
+            Menu.open();
         } else {
             $(this).removeClass('open');
-            closeMenu();
+            Menu.close();
         }
     });
 });
@@ -134,7 +133,7 @@ function openUrlInNewTab(url) {
 
 function closeSiteNav() {
     $(".external-site-modal").fadeOut("fast");
-    openMenu();
+    Menu.open();
 }
 
 $(document).on('click', '.close-popup-message', function() {
