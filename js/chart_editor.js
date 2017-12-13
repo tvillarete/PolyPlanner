@@ -50,7 +50,6 @@ var ChartEditor = {
             visibility: 'hidden',
             display: 'block'
         }).slideUp("fast", function() {
-//            deleteCourse(id);
             selectedBlocks.remove();
             selectedBlocks.removeClass('selected-block');
             ChartUpdater.countSelectedBlocks();

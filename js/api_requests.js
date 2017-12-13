@@ -212,16 +212,3 @@ function deleteActiveChart() {
         Menu.open();
     }
 }
-
-function deleteCourse(courseId) {
-    var chartName = userConfig.active_chart;
-    var username = userConfig.username.split('-')[1];
-    var request = $.ajax({
-        type: "DELETE",
-        url: `${apiURL}users/${username}/charts/${chartName}/${courseId}`,
-    });
-
-    request.done(function(response) {
-        console.log("Deleted course", courseId);
-    });
-}

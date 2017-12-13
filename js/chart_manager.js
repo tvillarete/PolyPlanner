@@ -66,6 +66,8 @@ var Chart = {
 
     clear: () => {
         $('.year-holder').empty();
+        $('.header-title').text('Welcome');
+        $('.welcome-container').show();
         Chart.ge_count = 0;
     },
 
@@ -135,6 +137,9 @@ var Chart = {
        var popup = Popup.courseInfo(name, catalog, description, prereqs, units, type);
        if (catalog === 'General Ed') {
             popup = Popup.emptyCourseInfo(name, catalog, units, type);
+       } else if (catalog == 'undefined') {
+            popup = Popup.emptyCourseInfo('Use edit mode to choose',
+                                          'Multiple Choices', 4, 'general-ed');
        }
        $('body').append(popup);
     },

@@ -131,6 +131,7 @@ function fetchCourse(courseItem) {
         }
 
         Menu.init();
+        Menu.stack = [];
     });
     Menu.close();
 }
