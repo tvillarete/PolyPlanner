@@ -4,20 +4,10 @@ const course_types = ['Major', 'Free Class', 'Support', 'General Ed', 'Minor', '
 var availableCharts = [];
 var departments = [];
 var departmentCourses = [];
-var completedGECount = 0;
-var completedSupportCount = 0;
-var completedMajorCount = 0;
 var savedChartBuilder;
 var username = localStorage.username ? localStorage.username : "";
 var userConfig = {};
 var guestConfig = localStorage.guestConfig ? JSON.parse(localStorage.guestConfig) : '';
-    /*{
-        "active_chart": "Software!",
-        "charts": {
-            "Software!" : "Software_Engineering",
-        },
-        "start_year": 2015,
-    };*/
 var startYear = getStartYear();
 var chartLoaded = false;
 

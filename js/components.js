@@ -68,14 +68,6 @@ var Button = {
     }
 }
 
-var Block = {
-    ribbon: () => {
-        return `
-            <div class="ribbon"></div>
-        `;
-    }
-}
-
 var Input = {
     searchWithCompletion: (id) => {
         return `
@@ -101,79 +93,107 @@ var View = {
     }
 }
 
-function newYearComponent(id, yearTitle, year, chartBuilder=false) {
-    summerQuarter = localStorage.summerQuarter ? true : false;
-    var component = `
-        <div class="year" id="${id}" name="${year}">
-            <div class="head">
-                <h2>${yearTitle}</h2>
-            </div>
-            <div class="quarter-holder">
-                ${newQuarterComponent("Fall", year, false, chartBuilder, 0)}
-                ${newQuarterComponent("Winter", year+1, false, chartBuilder, 1)}
-                ${newQuarterComponent("Spring", year+1, /* lastQuarter */ summerQuarter ? false : true, chartBuilder, 2)}
-        `;
-        if (summerQuarter) {
-            component = component.concat(`${newQuarterComponent("Summer", year+1, /* lastQuarter */ true, chartBuilder, 3)}`);
+var Year = {
+    init: yearOptions => {
+        var seasons = ['Fall', 'Winter', 'Spring', 'Summer'];
+        var currentSeason = getCurrentSeason();
+        var numQuarters = yearOptions.showSummerquarter ? 4 : 3;
+
+        $('.year-holder').append(Year.element(yearOptions));
+        for (var i=0; i < numQuarters; i++) {
+            var fullSeason = `${seasons[i]} ${yearOptions.year}`;
+            var quarterOptions = {
+                destination: $(`#${yearOptions.id}`),
+                season: seasons[i],
+                id: yearOptions.year + i,
+                classes: fullSeason == currentSeason ? 'current-quarter' : '',
+                fullSeason: fullSeason,
+                showDivider: i < numQuarters-1,
+            }
+            Quarter.init(quarterOptions);
         }
-    component = component.concat(`
-            </div>
-        </div>
-    `);
-    return component;
-}
+    },
 
-function newQuarterComponent(season, year, lastQuarter = false, chartBuilder=false, seasonId) {
-    var value = year + `${seasonId}`;
-    var currentSeason = getCurrentSeason();
-    var quarterSeason = `${season} ${year}`;
-    var quarter =  `
-        <div class="quarter ${quarterSeason == currentSeason ? "current-quarter" : ''}" name="${quarterSeason}" id="${value}" value="${value}">
-            <div class='quarter-head'>
-                <h4 class="season">${season}</h4>
-                <h4 class="quarter-unit-count"></h4>
+    element: options => {
+        return `
+            <div class="year" id="${options.id}" name="${options.year}">
+                <div class="head">
+                    <h2>${options.title}</h2>
+                </div>
+                <div class="quarter-holder"></div>
             </div>
-            ${chartBuilder ? newChartBuilderAddComponent() : ""}
-        </div>
-    `;
-    if (!lastQuarter) {
-        quarter = quarter.concat(`<div class="quarter-divider"></div>`);
+        `;
     }
-    return quarter;
 }
 
-function newBlockComponent(block_metadata, course_data, course_type = null, id = null) {
-    if (!course_type) {
-        course_type = block_metadata ? block_metadata.course_type.toLowerCase().split(' ').join("-") : "major";
+var Quarter = {
+    init: options => {
+        options.destination.find('.quarter-holder').append(Quarter.element(options));
+    },
+
+    element: options => {
+        return `
+            <div class="quarter ${options.classes}" name="${options.fullSeason}" id="${options.id}">
+                <div class="quarter-head">
+                    <h4 class="season">${options.season}</h4>
+                    <h4 class="quarter-unit-count"></h4>
+                </div>
+            </div>
+            ${options.showDivider ? '<div class="quarter-divider"></div>' : ''}
+        `;
     }
-    var name = course_data.title;
-    var catalog = `${course_data.dept} ${course_data.course_number}`;
-    var desc = course_data.description;
-    desc = desc.replace("'", "");
-    var prereqs = course_data.prereqs;
-    prereqs = prereqs ? prereqs.replace("'", "") : null;
-    var units = course_data.units;
-    return `
-        <div class="block-outline show-block"
-         onmouseup="ChartEditor.determineBlockAction(this, '${name}', '${catalog}', '${desc}',
-                                       '${prereqs}', '${units}', '${course_type}')">
-            <div class="edit-block-button">
-                <i class="material-icons">check</i>
-            </div>
-            <div class="block ${course_type}" id="${id}" value="${course_data.units}" data-courseType="${course_type}">
-                ${newBlockCourseDataView(course_data)}
-            </div>
-        </div>
-    `;
 }
 
-function newBlockCourseDataView(course_data) {
-    return `
-        ${Block.ribbon()}
-        <h3 class="block-catalog-info"><b>${course_data.dept} ${course_data.course_number}</b></h3>
-        <h5 class="block-title">${course_data.title}</h5>
-        <h5 class="block-unit-count"><b>${course_data.units} Units</b></h5>
-    `;
+var Block = {
+    init: options => {
+        if (options.destination) {
+            options.destination.append(Block.element(options));
+        }
+    },
+
+    element: (options) => {
+        var clickEvent = Block.clickEvent(options);
+
+        return `
+            <div class="block-outline show-block ${options.className}" onclick="${clickEvent}">
+                <div class="edit-block-button">
+                    <i class="material-icons">check</i>
+                </div>
+                <div class="block ${options.className}" id="${options.id}"
+                 value="${options.course_data.units}" data-courseType="${options.className}">
+                    ${Block.courseData(options)}
+                </div>
+            </div>
+        `;
+    },
+
+    clickEvent: options => {
+        var course_data = options.course_data;
+        if (!course_data)
+            return;
+        var name = course_data.title;
+        var catalog = `${course_data.dept} ${course_data.course_number}`;
+        var desc = course_data.description.replace("'", "");
+        var prereqs = course_data.prereqs;
+        prereqs = prereqs ? prereqs.replace("'", "") : null;
+        var units = course_data.units;
+        return `ChartEditor.determineBlockAction(
+            this, '${name}', '${catalog}', '${desc}', '${prereqs}', '${units}', '${options.className}'
+        )`;
+    },
+
+    courseData: options => {
+        var course_data = options.course_data;
+        if (!course_data)
+            return;
+        return `
+            <h3 class="block-catalog-info">
+                <b>${course_data.dept} ${course_data.course_number}</b>
+            </h3>
+            <h5 class="block-title">${course_data.title}</h5>
+            <h5 class="block-unit-count"><b>${course_data.units} Units</b></h5>
+        `;
+    }
 }
 
 function newMultiBlockComponent(block_metadata, course_data) {

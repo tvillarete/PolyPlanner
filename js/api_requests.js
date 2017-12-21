@@ -6,34 +6,44 @@ var API = {
             xhr.setRequestHeader ("Authorization", "Basic " + header);
             $("#submit-progress").removeClass("hidden");
         }
+        var options = {
+            type: 'POST',
+            url: `${API.url}/authorize`,
+            contentType: 'application/json',
+            beforeSend: beforeSend,
+            data: remember,
+        };
 
-        var request = API.newRequest(
-            'POST', `${API.url}/authorize`, 'application/json', remember, beforeSend
-        );
+        API.newRequest(options)
+            .done(function(config) {
+                var guestConfig = User.data();
+                if (guestConfig.charts && guestConfig.username === 'cpslo-guest') {
+                    var username = config.username.split('-')[1];
+                    config.active_chart = guestConfig.active_chart;
 
-        request.done(function(config) {
-            var guestConfig = User.data();
-            if (guestConfig.charts && guestConfig.username === 'cpslo-guest') {
-                var username = config.username.split('-')[1];
-                config.active_chart = guestConfig.active_chart;
-
-                $.each(guestConfig.charts, function(key, value) {
-                    API.importChart(value, key, username, true);
-                    config.charts[key] = value;
-                });
-            }
-            User.logged_in = true;
-            User.update(config);
-            Menu.init();
-        });
+                    $.each(guestConfig.charts, function(key, value) {
+                        API.importChart(value, key, username, true);
+                        config.charts[key] = value;
+                    });
+                    User.logged_in = false;
+                } else {
+                    User.logged_in = true;
+                }
+                User.update(config);
+                Menu.init();
+            });
     },
 
     logout: () => {
-        var request = API.newRequest('POST', `${API.url}/users/${User.username()}/logout`);
+        var options = {
+            type: 'POST',
+            url: `${API.url}/users/${User.username()}/logout`,
+        };
 
-        request.done(function() {
-            User.remove();
-        });
+        API.newRequest(options)
+            .done(function() {
+                User.remove();
+            });
     },
 
     stockCharts: () => {
@@ -43,65 +53,78 @@ var API = {
     importChart: (major, name, username, login) => {
         console.log(`Major: ${major}, Name: ${name}`);
         username = username ? username : User.username();
-        var url = `${API.url}/users/${username}/import`;
-        var data = JSON.stringify({
-            "target": major,
-            "year": "15-17",
-            "destination": name
-        });
-        var request = API.newRequest('POST', url, 'application/json', data)
+        var options = {
+            type: 'POST',
+            url: `${API.url}/users/${username}/import`,
+            contentType: 'application/json',
+            data: JSON.stringify({
+                "target": major,
+                "year": "15-17",
+                "destination": name
+            }),
+        };
 
-        request.done(function(response) {
-            if (!login) {
-                Menu.init();
-            }
-        });
-
-        request.fail(function(response) {
-            console.log(response);
-        });
+        API.newRequest(options)
+            .done(function(response) {
+                if (!login) {
+                    Menu.init();
+                }
+            }).fail(function(response) {
+                console.log(response);
+            });
     },
 
     loginStatus: () => {
-        var request = API.newRequest('GET', `${API.url}/users/${User.username()}`);
+        var options = {
+            type: 'GET',
+            url: `${API.url}/users/${User.username()}`,
+        };
 
-        request.done(function(response) {
-            console.log(response);
-            API.getUserConfig();
-        });
-
-        request.fail(function(response) {
-            if (response.status == 418) {
+        API.newRequest(options)
+            .done(function(response) {
                 User.logged_in = true;
                 Chart.init();
                 Menu.init();
-            } else {
-                User.remove();
-            }
-        });
+            }).fail(function(response) {
+                if (response.responseJSON.message === "User tvillare at school cpslo is successfully authenticated for this endpoint") {
+                    User.logged_in = true;
+                    Chart.init();
+                    Menu.init();
+                } else {
+                    User.logged_in = false;
+                }
+            });
     },
 
     getUserConfig: () => {
-        var request = API.newRequest('GET', `${API.url}/users/${User.username()}/config`);
+        var options = {
+            type: 'GET',
+            url: `${API.url}/users/${User.username()}/config`,
+        }
 
-        request.done(function(config) {
-            console.log('hi');
-            User.logged_in = true;
-            User.update(config);
-            $("#login-button").addClass('hidden');
-            $("#logout-button").removeClass("hidden");
-        });
+        API.newRequest
+            .done(function(config) {
+                console.log('hi');
+                User.logged_in = true;
+                User.update(config);
+                $("#login-button").addClass('hidden');
+                $("#logout-button").removeClass("hidden");
+            });
     },
 
     updateUserConfig: (newConfig) => {
         var username = newConfig.username.split('-')[1];
-        var url = `${API.url}/users/${username}/config`;
-        var data = JSON.stringify(newConfig);
-        var request = API.newRequest('POST', url, 'application/json', data);
+        var options = {
+            type: 'POST',
+            url: `${API.url}/users/${username}/config`,
+            contentType: 'application/json',
+            data: JSON.stringify(newConfig),
+        };
 
-        request.done(function(response) {
-            Chart.init();
-        });
+        API.newRequest(options)
+            .done(function(response) {
+                Chart.init();
+            });
     },
 
     userCharts: () => {
@@ -109,37 +132,42 @@ var API = {
     },
 
     addCourseToChart: () => {
+        /*
         if (User.logged_in) {
             var chart = User.getActiveChart();
             var contentType = 'application/json';
             var request = API.newRequest('POST', `${API.url}/users/${User.username()}/charts`, contentType);
         }
+        */
     },
 
     deleteChart: (name) => {
-        var url = `${API.url}/users/${User.username()}/charts/${name}`;
-        var request = API.newRequest('DELETE', url);
+        var options = {
+            type: 'DELETE',
+            url: `${API.url}/users/${User.username()}/charts/${name}`
+        };
+        var request = API.newRequest(options);
     },
 
     getCourseById: () => {
 
     },
 
-    updateCourse: () => {
-
+    updateCourse: block_metadata => {
+        console.log(block_metadata);
     },
 
     deleteCourse: (chart, courseId) => {
-        var url = `${API.url}/users/${User.username()}/charts/${chart}/${courseId}`;
-        var request = API.newRequest('POST', url)
-
-        request.done(function(response) {
-            console.log("Course Deleted!", response);
-        });
-
-        request.fail(function(response) {
-            console.log(response);
-        });
+        var options = {
+            type: 'DELETE',
+            url: `${API.url}/users/${User.username()}/charts/${chart}/${courseId}`,
+        };
+        API.newRequest(options)
+            .done(function(response) {
+                console.log("Course Deleted!", response);
+            }).fail(function(response) {
+                console.log(response);
+            });
     },
 
     getCoursesByDepartment: () => {
@@ -150,15 +178,15 @@ var API = {
 
     },
 
-    newRequest: (type, url, contentType, data, beforeSend) => {
+    newRequest: options => {
         return $.ajax({
-            type: type,
-            url: url,
-            contentType: contentType,
-            data: data,
-            beforeSend: beforeSend
+            type: options.type,
+            url: options.url,
+            contentType: options.contentType,
+            data: options.data,
+            beforeSend: options.beforeSend,
         });
-    }
+    },
 }
 
 function postChart(major, chartName) {
