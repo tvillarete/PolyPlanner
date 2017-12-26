@@ -4,6 +4,10 @@
 
 .major {
     background: $major-color;
+
+    .block-units {
+        background: $major-color;
+    }
 }
 
 .free-class {
@@ -12,6 +16,10 @@
 
 .support {
     background: $support-color;
+
+    .block-units {
+        background: $support-color;
+    }
 }
 
 .general-ed {
@@ -24,6 +32,10 @@
 
 .concentration {
     background: $concentration-color;
+}
+
+.blank {
+    background: $blank-color;
 }
 
 .popup-disabled, .disabled {

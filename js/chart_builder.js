@@ -116,19 +116,19 @@ function fetchCourse(courseItem) {
     });
 
     request.done(function(data) {
-        if ($('.block').hasClass('replaceable')) {
-            var course_type = $('.block.replaceable').attr('class').split(' ')[1];
-            var course = newBlockComponent(null, data, course_type);
-            var block = $('.block.replaceable').parent();
-            block.replaceWith(course);
-            $('.block.replaceable').removeClass('replaceable');
-        } else {
-            var course = newBlockComponent(null, data);
-            var quarter = $(".appending").index();
-            var year = $('.appending').parent().parent().index();
-            console.log(quarter, year);
-            $(course).insertBefore($('.appending .add-block-button'));
-        }
+        data = {block_metadata: {}, course_data: data};
+        data.block_metadata.course_type = !$('.appending').length ?
+            $('.block.replaceable').attr('class').split(' ')[1] : "blank";
+
+        Block.init({
+            destination: $('.appending').length ? $('.appending') : $('.replaceable').parent(),
+            initType: $('.appending').length ? 'append' : 'replace',
+            header: Block.getHeader(null, data.course_data),
+            data: data,
+            className: Block.getCourseType(data.block_metadata, data.course_data),
+            contents: data.course_data.title,
+            id: data._id,
+        });
 
         Menu.init();
         Menu.stack = [];

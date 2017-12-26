@@ -53,41 +53,56 @@
 }
 
 .block {
+    position: absolute;
     height: 100%;
     width: 100%;
-    position: absolute;
     overflow: hidden;
     cursor: pointer;
-    padding: 16px 15px 16px 18px;
     box-sizing: border-box;
+    padding: 15px;
+    text-align: left;
 
     &.editable {
         position: relative;
         cursor: move !important;
     }
 
-    h3, h4, h5, h6 {
-        display: block;
+    &.concentration, &.free {
+        .block-contents {
+            opacity: 0;
+        }
+    }
+
+    p, h3, h4, h5, h6 {
         margin: 0;
-        text-align: left;
     }
 
-    .choose {
-        margin-bottom: 0.6em;
+    .block-header {
+        font-weight: bold;
     }
 
-    .block-title {
+    .block-contents {
         overflow: hidden;
         display: -webkit-box;
         -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
         text-overflow: ellipsis;
         height: 3.7em;
-        margin: 5px 0 0 0;
+        padding-top: 0.5em;
+        font-size: 0.85em;
+
+        p {
+            margin: 0;
+        }
     }
 
-    .block-unit-count {
-        margin-top: 5px;
+    .block-units {
+        position: absolute;
+        height: 2em;
+        width: 100%;
+        line-height: 2em;
+        bottom: 0.6em;
+        font-weight: bold;
     }
 }
 

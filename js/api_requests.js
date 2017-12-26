@@ -153,8 +153,21 @@ var API = {
 
     },
 
-    updateCourse: block_metadata => {
-        console.log(block_metadata);
+    updateCourse: data => {
+        var id = data._id;
+        var options = {
+            type: 'PUT',
+            url: `${API.url}/users/${User.username()}/charts/${User.getActiveChart()}/${id}`,
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+        }
+        console.log(data);
+        API.newRequest(options)
+            .done(function(response) {
+                console.log("Course Updated!", response);
+            }).fail(function(response) {
+                console.log(response);
+            });
     },
 
     deleteCourse: (chart, courseId) => {

@@ -54,6 +54,24 @@
         }
     }
 
+    .popup-body {
+        min-height: 23em;
+        position: relative;
+
+        .background-text {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 1em;
+            margin: 6em auto;
+            text-align: center;
+            font-size: 1.5em;
+            color: rgba(0,0,0,0.4);
+        }
+    }
+
     .popup-section {
         display: flex;
         padding: 1em 2em;
@@ -71,6 +89,7 @@
 
     .prereq-container {
         height: 15%;
+        max-height: 4em;
         border-bottom: 1px solid rgba(0,0,0,0.12);
 
         .popup-section-title {
@@ -79,10 +98,23 @@
     }
 
     .description-container {
-        height: 10em;
+        max-height: 6.4em;
+    }
+
+    .notes-container {
+        max-height: 3em;
+
+        .popup-section-title {
+            color: #4d8cca;
+        }
     }
 
     .button-container {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 1.5em 0;
         display: flex;
         justify-content: center;
     }

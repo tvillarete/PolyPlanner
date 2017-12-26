@@ -5,6 +5,197 @@
 
 /* Flowchart Components */
 
+var Year = {
+    init: yearOptions => {
+        var seasons = ['Fall', 'Winter', 'Spring', 'Summer'];
+        var currentSeason = getCurrentSeason();
+        var numQuarters = yearOptions.showSummerQuarter ? 4 : 3;
+
+        $('.year-holder').append(Year.element(yearOptions));
+        for (var i=0; i < numQuarters; i++) {
+            var fullSeason = `${seasons[i]} ${yearOptions.year}`;
+            var quarterOptions = {
+                destination: $(`#${yearOptions.id}`),
+                season: seasons[i],
+                id: yearOptions.year + `${i}`,
+                classes: fullSeason == currentSeason ? 'current-quarter' : '',
+                fullSeason: fullSeason,
+                showDivider: i < numQuarters-1,
+            }
+            Quarter.init(quarterOptions);
+        }
+    },
+
+    element: options => {
+        return `
+            <div class="year" id="${options.id}" name="${options.year}" value="${options.value}">
+                <div class="head">
+                    <h2>${options.title}</h2>
+                </div>
+                <div class="quarter-holder"></div>
+            </div>
+        `;
+    }
+}
+
+var Quarter = {
+    init: options => {
+        options.destination.find('.quarter-holder').append(Quarter.element(options));
+    },
+
+    element: options => {
+        return `
+            <div class="quarter ${options.classes}" name="${options.fullSeason}"
+             id="${options.id}" value="${options.season}">
+                <div class="quarter-head">
+                    <h4 class="season">${options.season}</h4>
+                    <h4 class="quarter-unit-count"></h4>
+                </div>
+            </div>
+            ${options.showDivider ? '<div class="quarter-divider"></div>' : ''}
+        `;
+    }
+}
+
+var Block = {
+    init: options => {
+        var id = `#${options.id}`;
+        var block = Block.element(options);
+        if (options.initType === 'append') {
+            $(block).insertBefore($('.appending .add-block-button'));
+        } else if (options.initType === 'replace') {
+            options.destination.replaceWith(block);
+        } else {
+            options.destination.append(block);
+        }
+
+        $(id).parent().data(options.data);
+    },
+
+    element: (options) => {
+        var clickEvent = 'ChartEditor.determineBlockAction(this)';
+
+        return `
+            <div class="block-outline show-block ${options.className}"
+             onclick="${clickEvent}">
+                <div class="edit-block-button">
+                    <i class="material-icons">check</i>
+                </div>
+                <div class="block ${options.className}" id="${options.id}"
+                 value="${options.hasCourseData ? options.data.course_data.units : 4}" >
+                    ${Block.contents(options)}
+                </div>
+            </div>
+        `;
+    },
+
+    contents: options => {
+        var course_data = options.data.course_data;
+        var header = options.header;
+        var contents = options.contents ? options.contents : 'Area ' + Chart.getGeArea();
+        var units = course_data ? course_data.length ?
+            course_data[0].units : course_data.units : 4;
+        options.genericCourse = !(course_data);
+        options.multiCourse = course_data && course_data.length;
+
+        if (course_data && course_data.length) {
+            contents = '';
+            $.each(course_data, function(index, course) {
+                contents = contents.concat(`
+                    <p class="course-catalog-title">
+                        ${course.dept} ${course.course_number}
+                    </p>
+                `);
+            });
+        }
+
+        return `
+            <h3 class="block-header">${header}</h3>
+            <div class="block-contents">${contents}</div>
+            <h5 class="block-units">${units} Units</h5>
+            ${Block.courseSelectorButton(options)}
+        `;
+    },
+
+    courseSelectorButton: options => {
+        if (!(options.genericCourse || options.multiCourse))
+            return '';
+        var clickEvent = options.genericCourse ?
+            'openCourseSelector(this.parentNode); return false;' :
+            'openMultiCourseSelector(this.parentNode); return false;'
+        return `
+            <div class="course-specify-button" onclick="${clickEvent}">
+                <i class="material-icons">edit</i>
+            </div>
+        `;
+    },
+
+    getHeader: (block_metadata, course_data) => {
+        if (block_metadata) {
+            if (block_metadata.course_type === 'General Ed') {
+                return block_metadata.course_type;
+            } else if (block_metadata.elective_title) {
+                return block_metadata.elective_title;
+            } else if (!course_data.length){
+                return `${course_data.dept} ${course_data.course_number}`;
+            } else {
+                return "Choose";
+            }
+        } else if (course_data && !course_data.length) {
+            return `${course_data.dept} ${course_data.course_number}`;
+        }
+        return "Choose";
+    },
+
+    getSubtitle: data => {
+        if (!$.isEmptyObject(data.block_metadata)) {
+            if (data.course_data) {
+                if (data.block_metadata.course_type === 'General Ed') {
+                    return data.course_data && data.course_data.length ?
+                        'Multiple Courses Available' :
+                        'Course not specified';
+                } else if (data.course_data && data.course_data.length) {
+                    return "Multiple Courses Available"
+                }
+                return data.course_data.title;
+            }
+            return data.block_metadata.elective_title;
+        }
+        return data.course_data.title;
+    },
+
+    getCourseType: (block_metadata, course_data) => {
+        return block_metadata ? block_metadata.course_type : 'blank'
+    },
+
+    getInfoSections: (data) => {
+        if (data.course_data && !data.course_data.length) {
+            return {
+                'prereq-container': {
+                    title: 'Prereqs',
+                    text: data.course_data.prereqs ? data.course_data.prereqs :
+                    'None',
+                },
+                'description-container': {
+                    title: 'Description',
+                    text: data.course_data.description,
+                },
+                'notes-container': {
+                    title: 'Notes',
+                    text: data.block_metadata ? data.block_metadata.notes ? data.block_metadata.notes : 'None' : 'None'
+                }
+            }
+        } else {
+            return {
+                'description-container': {
+                    title: 'Instructions',
+                    text: 'Click the pencil in the bottom right to edit this block'
+                }
+            }
+        }
+    }
+}
+
 var Button = {
     actionButton: (text, clickEvent) => {
         return `
@@ -93,175 +284,6 @@ var View = {
     }
 }
 
-var Year = {
-    init: yearOptions => {
-        var seasons = ['Fall', 'Winter', 'Spring', 'Summer'];
-        var currentSeason = getCurrentSeason();
-        var numQuarters = yearOptions.showSummerquarter ? 4 : 3;
-
-        $('.year-holder').append(Year.element(yearOptions));
-        for (var i=0; i < numQuarters; i++) {
-            var fullSeason = `${seasons[i]} ${yearOptions.year}`;
-            var quarterOptions = {
-                destination: $(`#${yearOptions.id}`),
-                season: seasons[i],
-                id: yearOptions.year + i,
-                classes: fullSeason == currentSeason ? 'current-quarter' : '',
-                fullSeason: fullSeason,
-                showDivider: i < numQuarters-1,
-            }
-            Quarter.init(quarterOptions);
-        }
-    },
-
-    element: options => {
-        return `
-            <div class="year" id="${options.id}" name="${options.year}">
-                <div class="head">
-                    <h2>${options.title}</h2>
-                </div>
-                <div class="quarter-holder"></div>
-            </div>
-        `;
-    }
-}
-
-var Quarter = {
-    init: options => {
-        options.destination.find('.quarter-holder').append(Quarter.element(options));
-    },
-
-    element: options => {
-        return `
-            <div class="quarter ${options.classes}" name="${options.fullSeason}" id="${options.id}">
-                <div class="quarter-head">
-                    <h4 class="season">${options.season}</h4>
-                    <h4 class="quarter-unit-count"></h4>
-                </div>
-            </div>
-            ${options.showDivider ? '<div class="quarter-divider"></div>' : ''}
-        `;
-    }
-}
-
-var Block = {
-    init: options => {
-        if (options.destination) {
-            options.destination.append(Block.element(options));
-        }
-    },
-
-    element: (options) => {
-        var clickEvent = Block.clickEvent(options);
-
-        return `
-            <div class="block-outline show-block ${options.className}" onclick="${clickEvent}">
-                <div class="edit-block-button">
-                    <i class="material-icons">check</i>
-                </div>
-                <div class="block ${options.className}" id="${options.id}"
-                 value="${options.course_data.units}" data-courseType="${options.className}">
-                    ${Block.courseData(options)}
-                </div>
-            </div>
-        `;
-    },
-
-    clickEvent: options => {
-        var course_data = options.course_data;
-        if (!course_data)
-            return;
-        var name = course_data.title;
-        var catalog = `${course_data.dept} ${course_data.course_number}`;
-        var desc = course_data.description.replace("'", "");
-        var prereqs = course_data.prereqs;
-        prereqs = prereqs ? prereqs.replace("'", "") : null;
-        var units = course_data.units;
-        return `ChartEditor.determineBlockAction(
-            this, '${name}', '${catalog}', '${desc}', '${prereqs}', '${units}', '${options.className}'
-        )`;
-    },
-
-    courseData: options => {
-        var course_data = options.course_data;
-        if (!course_data)
-            return;
-        return `
-            <h3 class="block-catalog-info">
-                <b>${course_data.dept} ${course_data.course_number}</b>
-            </h3>
-            <h5 class="block-title">${course_data.title}</h5>
-            <h5 class="block-unit-count"><b>${course_data.units} Units</b></h5>
-        `;
-    }
-}
-
-function newMultiBlockComponent(block_metadata, course_data) {
-    var fullTitle = ``;
-    var numCourses = course_data.length;
-    var course_type = block_metadata.course_type.toLowerCase().split(' ').join("-");
-    var id = '';
-    course_data.forEach(function(val, index) {
-        id = id.concat(`${index > 0 ? '-' : ''}${val._id}`);
-    });
-    var block = `
-        <div class="block-outline show-block multi-block"
-         onclick="ChartEditor.determineBlockAction(this, '${course_data.title}',
-          '${course_data.description}', '${course_data.prereqs}', '${course_data.dept}',
-          '${course_data.course_number}')">
-            <div class="edit-block-button">
-                <i class="material-icons">check</i>
-            </div>
-            <div class="block ${course_type}" id="${id}" value="${course_data[0].units}">
-                <div class="ribbon"></div>
-                <h5 class="block-catalog-info choose">Choose:</h5>
-                <div class="block-catalog">
-    `;
-    course_data.forEach(function(val, index) {
-        if (index == 0 && numCourses == 2) {
-            block = block.concat(`<h4 class="course-catalog-title">
-                <b>${val.dept} ${val.course_number}</b></h4><h4>or</h4>`);
-        } else {
-            block = block.concat(`<h4 class="course-catalog-title">
-                                 <b>${val.dept} ${val.course_number}</b></h4>`);
-        }
-
-    });
-    block = block.concat(`
-                </div>
-                <div class="course-specify-button" onclick="openMultiCourseSelector(this.parentNode); return false;">
-                    <i class="material-icons">edit</i>
-                </div>
-            </div>
-        </div>
-    `);
-    return block;
-}
-
-function newElectiveBlockComponent(block_metadata) {
-    var course_type = block_metadata.course_type.toLowerCase().split(' ').join("-");
-    var title = block_metadata.elective_title ? block_metadata.elective_title :
-     block_metadata.course_type;
-    var area = course_type === 'general-ed' ? `Area ${Chart.getGeArea()}` : '';
-    return `
-        <div class="block-outline show-block ${area !== '' ? 'ge-block' : 'elective-block'}"
-         onclick="ChartEditor.determineBlockAction(this, '${area}', '${title}',
-          '', '', 4, '${course_type}')">
-            <div class="edit-block-button">
-                <i class="material-icons">check</i>
-            </div>
-            <div class="block ${course_type}" id="${block_metadata._id}" value="4">
-                <div class="ribbon"></div>
-                <h3 class="block-catalog-info"><b>${title}</b></h3>
-                <h5 class="block-title">${area}</h5>
-                <h5 class="block-unit-count"><b>4 Units</b></h5>
-                <div class="course-specify-button" onclick="openCourseSelector(this.parentNode)">
-                    <i class="material-icons">edit</i>
-                </div>
-            </div>
-        </div>
-    `;
-}
 
 /* Chart Builder Components */
 
@@ -305,210 +327,85 @@ function newCourseSpecifierComponent() {
     return component;
 }
 
-/* Menu Views */
-function newChartBrowserView() {
-    var view = Button.header('New Flowchart');
-    $.each(availableCharts, function(index, value) {
-        var major = Object.keys(availableCharts[index])[0];
-        major = major.split('_').join(" ");
-        if (major != $(".degree-name").text()) {
-            view = view.concat(`
-                <h3 class="menu-option slide-in-right" id="${Object.keys(value)}"
-                 onclick="changeStockFlowchart(this.id)">${major}
-                </h3>
-            `);
-        }
-    });
-    return view;
-}
-
-function newChartNamerView(newMajor) {
-    newMajor = newMajor.replace(/'/g, "\\'");
-    return `
-        <form class="menu-form slide-in-right" id="chart-name-form" action="#">
-            <div class="input-field col s6">
-                <input id="chart-name-input" type="text" class="validate" autofocus autocomplete="off">
-                <label for="chart-name-input">Chart Name</label>
-            </div>
-            <button class="slide-in-right" onclick="User.addChart('${newMajor}')">Submit</button>
-        </form>
-    `;
-}
-
-function newMultiCourseSelectorView(courseNames) {
-    var view = '';
-    var id = courseNames[0];
-    courseNames.forEach(function(course, index) {
-        if (index > 0) {
-            var courseUrl = course.trim().split(' ').join('/');
-            console.log(courseUrl);
-
-            view = view.concat(
-                Button.menuOption('', `ChartEditor.replaceBlock('${id}', '${courseUrl}')`, course, 'keyboard_arrow_right')
-            );
-        }
-    });
-    return view;
-}
-
-function newUtilitiesView() {
-    return `
-        ${Button.header('Degree Information')}
-        <h3 class="menu-option slide-in-right ${$(".header-title").text() == 'New Flowchart' ? 'hidden' : ''}" onclick="showCurriculumSheet()">Get Curriculum Sheet
-            <i class="material-icons">keyboard_arrow_right</i>
-        </h3>
-        <h4 class="modal-sub-header">Completed Units</h4>
-        <h4 class="modal-statistic" id="ge-count">GE's: ${completedGECount}</h4>
-        <h4 class="modal-statistic" id="support-count">Support: ${completedSupportCount}</h4>
-        <h4 class="modal-statistic" id="major-count">Major: ${completedMajorCount}</h4>
-    `;
-}
-
-function newLoginView() {
-    return `
-        ${Button.header('Log In')}
-        <div class="login-img-container">
-            <img class="school-logo login-img slide-in-right" src="img/school_logos/cpslo.png">
-        </div>
-        <form class="menu-form slide-in-right" id="login-form" action="#">
-            <div class="input-field col s6">
-                <input id="login-username" type="text" class="validate" autofocus>
-                <label for="login-username">Username</label>
-            </div>
-            <div class="input-field col s6">
-                <input id="login-password" type="password" class="validate">
-                <label for="login-password">Password</label>
-            </div>
-            <p class="login-error-text slide-in-right hidden">Incorrect Username or Password</p>
-            <button type="button" class="slide-in-right" onclick="User.login()">Submit</button>
-            <div class="progress-bar hidden" id="submit-progress">
-                <div class="indeterminate"></div>
-            </div>
-        </form>
-        <h3 class="menu-option slide-in-right" id="toggle-rememberMe">Remember
-            <label class="switch">
-                <input type="checkbox" ${localStorage.rememberMe ? 'checked' : ''}>
-                <div class="toggle round"></div>
-            </label>
-        </h3>
-    `;
-}
-
-function newSettingsView(val) {
-    return `
-        ${Button.header('Settings')}
-        <h3 class="menu-option slide-in-right" id="toggle-summerQuarter">Summer Quarter
-            <label class="switch">
-                <input type="checkbox" ${localStorage.summerQuarter ? 'checked' : ''}>
-                <div class="toggle round" onclick="toggleSummerQuarter(this.parentNode)"></div>
-            </label>
-        </h3>
-        <h3 class="menu-option slide-in-right" id="toggle-superSenior">Five Years
-            <label class="switch">
-                <input type="checkbox" ${localStorage.superSenior ? 'checked' : ''}>
-                <div class="toggle round" onclick="toggleSuperSenior(this.parentNode)"></div>
-            </label>
-        </h3>
-        ${Button.menuOption(/* id */ 'year-selector', /* clickEvent */ "changeWindow(this.id)",
-         /* text */ 'Starting Year', /* icon */ 'keyboard_arrow_right')}
-        ${Button.menuOption('about', "changeWindow(this.id)", 'About', 'keyboard_arrow_right')}
-        ${Button.menuOption('', "User.remove()", 'Clear Cache', 'replay')}
-    `;
-}
-
 function clearCache() {
     localStorage.removeItem('guestConfig');
     location.reload();
 }
 
-function newYearSelectorView(chartBrowser = false) {
-    var element =  Button.header('When did you start?');
-    var date = new Date();
-    var year = date.getFullYear();
-    for(i = (new Date()).getFullYear()+1; i >= year-6; i--){
-        element = element.concat(`<h3 class="menu-option slide-in-right" value="${i}" onclick="changeStartYear(this, '${chartBrowser ? true : false}')">${i}</h3>`);
-    }
-    return element;
-}
-
-function newAboutView() {
-    return `
-        <div class="menu-logo-container slide-in-right">
-            <div class="logo menu-logo">
-                <div class="logo-letter">
-                    <div id="top-f"></div>
-                    <div id="bottom-f"></div>
-                </div>
-                <div class="bottom-text">flowchamp</div>
-            </div>
-        </div>
-        <h3 class="modal-sub-header">FlowChamp was created to make college planning easier and more connected.</h3>
-        <h3 class="modal-sub-header">Development of this project was done by two students attending Cal Poly.</h3>
-        ${Button.menuOption('', "openUrlInNewTab('http://devjimheald.com')", 'Jim Heald (Backend)', 'open_in_new')}
-        ${Button.menuOption('', "openUrlInNewTab('http://tannerv.com')", 'Tanner Villarete (Frontend)', 'open_in_new')}
-    `
-}
-
 var Popup = {
-    courseInfo: (name, catalog, description, prereqs, units, type) => {
-        prereqs = prereqs == 'null' ? 'None' : prereqs;
-        var dept = catalog.split(' ')[0];
-        var num = catalog.split(' ')[1];
-        return `
-        <div class="popup-window">
-            <div class="popup-header ${type}">
-                <div class="popup-title-container">
-                    <h3><b>${catalog}</b></h3>
-                    <h3>${name}</h3>
-                </div>
-                <div class="close-popup-container">
-                    <h3 id="close-popup-button"
-                     onclick="Chart.closePopup()">&times;</h3>
-                    <h3 id="popup-unit-count">${units} units</h3>
-                </div>
-            </div>
-            <div class="popup-section prereq-container">
-                <div class="popup-section-title">Prereqs</div>
-                <div class="popup-section-body">${prereqs}</div>
-            </div>
-            <div class="popup-section description-container">
-                <div class="popup-section-title">Description</div>
-                <div class="popup-section-body">${description}</div>
-            </div>
-            <div class="popup-section button-container">
-                <div class="popup-button"
-                 onclick="window.open('http://polyratings.com/search.php?type=Class&terms=${dept}+${num}&format=long&sort=rating')">
-                    Check PolyRatings
-                 </div>
-            </div>
-        </div>
+    init: options => {
+        var element = Popup.element(options);
+        $('.popup-disabled').show();
+        $('body').append(element)
+    },
 
+    element: options => {
+        return `
+            <div class="popup-window">
+                <div class="popup-header ${options.class}">
+                    ${Popup.header(options)}
+                </div>
+                <div class="popup-body">
+                    ${Popup.body(options.sections)}
+                    ${options.button ? Popup.button(options.button) : ''}
+                </div>
+            </div>
         `;
     },
 
-    emptyCourseInfo: (name, catalog, units, type) => {
-        var dept = catalog.split(' ')[0];
-        var num = catalog.split(' ')[1];
+    header: options => {
         return `
-        <div class="popup-window">
-            <div class="popup-header ${type}">
-                <div class="popup-title-container">
-                    <h3><b>${catalog}</b></h3>
-                    <h3>${name}</h3>
-                </div>
-                <div class="close-popup-container">
-                    <h3 id="close-popup-button"
-                     onclick="Chart.closePopup()">&times;</h3>
-                    <h3 id="popup-unit-count">${units} units</h3>
-                </div>
+            <div class="popup-title-container">
+                <h3><b>${options.title}</b></h3>
+                <h3>${options.subtitle}</h3>
             </div>
-            <div class="popup-section empty-popup-container">
-                <h3>No course picked yet</h3>
+            <div class="close-popup-container">
+                <h3 id="close-popup-button" onclick="Popup.remove()">&times;</h3>
+                <h3 id="popup-unit-count">${options.value}</h3>
             </div>
-        </div>
-
         `;
-    }
+    },
+
+    body: options => {
+        var view = '';
+        $.each(options, function(key, section) {
+            view = view.concat(Popup.section({
+                class: key,
+                title: section.title,
+                text: section.text,
+            }));
+        });
+        return view;
+    },
+
+    section: options => {
+        return `
+            <div class="popup-section ${options.class}">
+                <div class="popup-section-title">${options.title}</div>
+                <div class="popup-section-body">${options.text}</div>
+            </div>
+        `;
+    },
+
+    button: options => {
+        return `
+            <div class="popup-section button-container">
+                <div class="popup-button" onclick="${options.clickEvent}">
+                    ${options.title}
+                </div>
+            </div>
+        `;
+    },
+
+    remove: () => {
+        $(".popup-disabled").fadeOut("fast");
+        $(".popup-window").animate({
+            opacity: 0,
+            top: "-=150",
+        }, 100, function() {
+            $(this).remove();
+        });
+    },
 }
 
 var MenuView = {

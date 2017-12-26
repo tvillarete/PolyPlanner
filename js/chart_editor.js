@@ -15,14 +15,31 @@ var ChartEditor = {
         }, 400);
     },
 
-    determineBlockAction: (block, name, catalog, desc, prereqs, units, course_type) => {
-        clearTimeout(timeoutId);
+    determineBlockAction: blockOutline => {
         if ($('.base').hasClass('base-editing')) {
-            ChartEditor.select(block);
-        } else if (!$(block).hasClass('multi-block') && !$(block).hasClass('elective-block')) {
-            Chart.displayPopup(name, catalog, desc, prereqs, units, course_type);
+            ChartEditor.select(blockOutline);
         } else {
-            Chart.displayPopup(name, catalog, desc, prereqs, units, course_type);
+            var data = $(blockOutline).data();
+            var button = {
+                title: 'Check Polyratings',
+                clickEvent: data.course_data ? `window.open(
+                    'http://polyratings.com/search.php?type=Class&terms=${data.course_data.dept}+${data.course_data.course_number}&format=long&sort=rating'
+                )` : '',
+            }
+            var value = data.course_data ?
+                data.course_data.length ? data.course_data[0].units : data.course_data.units :
+                "4";
+            value = value + " Units"
+            var subtitle = Block.getSubtitle(data);
+            Popup.init({
+                title: Block.getHeader(data.block_metadata, data.course_data),
+                subtitle: subtitle ? subtitle : $(blockOutline).find('.block-contents').text(),
+                value: value,
+                class: !$.isEmptyObject(data.block_metadata) ?
+                    data.block_metadata.course_type.toLowerCase().split(' ').join('-') : 'blank',
+                sections: Block.getInfoSections(data),
+                button: data.course_data && !data.course_data.length ? button : null,
+            });
         }
     },
 
@@ -32,13 +49,20 @@ var ChartEditor = {
         });
 
         request.done(function(data) {
-            var block = $('#'+blockId);
-            console.log(block);
-            block.parent().removeClass('multi-block elective-block');
-            block.html(newBlockCourseDataView(data));
-            block.attr("id", data._id);
-            block.parent().removeClass('selected-block');
+            data = {block_metadata: {}, course_data: data};
+            var oldBlock = $('#'+blockId).parent();
+            data.block_metadata.course_type = oldBlock.attr('class').split(' ')[1];
+            Block.init({
+                destination: oldBlock,
+                initType: 'replace',
+                header: Block.getHeader(data.block_metadata, data.course_data),
+                data: data,
+                className: data.block_metadata.course_type,
+                contents: data.course_data.title,
+                id: data.course_data._id,
+            });
         });
+        Menu.stack = [];
         Menu.init();
         Menu.close();
     },
@@ -66,7 +90,13 @@ var ChartEditor = {
         var selectedBlocks = $(".selected-block .block");
         var colorPalette = $(".color-palette");
 
-        selectedBlocks.removeClass("general-ed support free-class concentration major minor");
+        selectedBlocks.parent().each(function(index, block) {
+            var data = $(block).data();
+            data.block_metadata.course_type = colorClass;
+            $(block).data(data);
+        });
+
+        selectedBlocks.removeClass("blank general-ed support free-class concentration major minor");
         selectedBlocks.addClass(colorClass);
         colorPalette.addClass("hidden");
     },
@@ -234,7 +264,7 @@ function openMultiCourseSelector(block) {
 
     changeWindow('multi-course-selector', "Choose a Course", courseList);
 }
-
+var stuff = 'hi';
 function setupSortable(items, cancel, connectWith) {
     $(".quarter").sortable({
         items: items,
@@ -254,6 +284,10 @@ function setupSortable(items, cancel, connectWith) {
             item.removeClass('mark-complete mark-in-progress show-block');
             var $helper = $("<div class='sortable-helper'></div>");
             var selected = $(".selected-block");
+            Chart.pendingBlocks = [];
+            selected.each(function() {
+                Chart.pendingBlocks.push($(this).data())
+            });
             var $cloned = selected.clone();
             $helper.append($cloned);
             selected.hide();
@@ -271,6 +305,7 @@ function setupSortable(items, cancel, connectWith) {
             ui.item.siblings(":hidden").remove();
             ui.item.remove();
             $('.selected-block').removeClass('selected-block');
+            Chart.update();
             ChartUpdater.checkCompletion();
             ChartUpdater.countUnits();
             ChartUpdater.countSelectedBlocks();
@@ -321,25 +356,6 @@ function toggleFlagPalette(toggleOff = false) {
         flagPalette.addClass("hidden");
     }
     colorPalette.addClass("hidden");
-}
-
-function popupCourseInfo(title, description, prereqs, dept, num) {
-    var element =
-        `<div class="popup-message z-depth-5">
-            <h2 class="popup-title">${title}</h2>
-            <div class="popup-description-container">
-                <h3 class="popup-body">`+description+`</h3>
-            </div>
-            <h4 class="popup-ps">Prereqs: ${prereqs ? prereqs : "none"}</h4>
-            <div class="popup-button-container">
-                <h4 class="close-popup-message" onclick="closePopupMessage()">Okay</h4>
-                <h4 class="close-popup-message" onclick="window.open('http://polyratings.com/search.php?type=Class&terms=${dept}+${num}&format=long&sort=rating');">PolyRatings</h4>
-            </div>
-         </div>`;
-    if (!$('.base').hasClass('base-editing')) {
-        $(".popup-disabled").show();
-        $("body").append(element);
-    }
 }
 
 function addBlockFlag(flagId) {

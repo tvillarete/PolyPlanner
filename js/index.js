@@ -41,6 +41,7 @@ $(window).resize(function(){
 
 function loadTasks() {
     //localStorage.removeItem('userConfig');
+    document.addEventListener("touchstart", function(){}, true);
     if (localStorage.userConfig) {
         User.checkLoginStatus();
     } else {

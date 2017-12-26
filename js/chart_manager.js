@@ -5,6 +5,7 @@ var Chart = {
     courses: [],
     ge_areas: ['A1', 'A2', 'A3', 'B1', 'B2', 'B3', 'B6', 'C1', 'C2', 'C3', 'C4', 'D1', 'D2', 'D3', 'D4'],
     ge_count: 0,
+    pendingBlocks: {},
 
     init: () => {
         var startYear = ChartUpdater.getStartYear();
@@ -17,7 +18,8 @@ var Chart = {
                 title: titles[i],
                 year: startYear+i,
                 id: `year${i+1}`,
-                showSummerQuarter: localStorage.summerQuarter ? true : false,
+                showSummerQuarter: localStorage.summerQuarter == "true",
+                value: i+1,
             }
             Year.init(yearOptions);
         }
@@ -48,34 +50,45 @@ var Chart = {
     parse: (data) => {
         var seasons = ['Fall', 'Winter', 'Spring', 'Summer'];
 
-        Chart.courses = [];
         $.each(data, function(key, value) {
             var year = value.block_metadata.time[0];
             var quarter = seasons.indexOf(value.block_metadata.time[1]);
             var dest = $('.year-holder').children().eq(year-1).children()
                 .eq(1).children('.quarter').eq(quarter);
+
+            value.block_metadata = value.block_metadata ? value.block_metadata : {};
             var block_metadata = value.block_metadata;
             var course_data = value.course_data;
             var className = block_metadata ?
                 block_metadata.course_type.toLowerCase().split(' ').join('-') : '';
 
-            var options = {
+            Block.init({
                 destination: dest,
-                block_metadata: value.block_metadata,
-                course_data: value.course_data,
+                header: Block.getHeader(block_metadata, course_data),
+                data: value,
+                contents: Block.getSubtitle(value),
                 className: className,
                 id: key,
-            };
-
-            if (course_data && course_data.length) {
-                dest.append(newMultiBlockComponent(block_metadata, course_data));
-            } else if (course_data) {
-                Block.init(options);
-            } else {
-                dest.append(newElectiveBlockComponent(block_metadata));
-            }
+            });
         });
         $('.quarter').append(`<div class="add-block-button">&plus;</div>`);
+    },
+
+    update: () => {
+        $.each(Chart.pendingBlocks, function(index, data) {
+            var block_metadata = data.block_metadata;
+            var course_data = data.course_data;
+            var block = $(`#${block_metadata._id}`).parent();
+            var year = block.closest('.year').attr('value');
+            var season = block.closest('.quarter').attr('value');
+
+            course_data.time = [parseInt(year), season];
+            block.data(data);
+
+            if (User.logged_in) {
+                API.updateCourse(block_metadata);
+            }
+        });
     },
 
     clear: () => {
@@ -146,6 +159,9 @@ var Chart = {
         return Chart.ge_areas[Chart.ge_count++];
     },
 
+    displayPopup: course_data => {
+    },
+    /*
     displayPopup: (name, catalog, description, prereqs, units, type, isTech) => {
        $('.popup-disabled').show();
        var popup = Popup.courseInfo(name, catalog, description, prereqs, units, type);
@@ -157,14 +173,5 @@ var Chart = {
        }
        $('body').append(popup);
     },
-
-    closePopup: () => {
-        $(".popup-disabled").fadeOut("fast");
-        $(".popup-window").animate({
-            opacity: 0,
-            top: "-=150",
-        }, 100, function() {
-            $(this).remove();
-        });
-    },
+    */
 }
